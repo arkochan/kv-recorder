@@ -9,9 +9,12 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "lazy-brush": "^2.0.2",
+    "next": "15.1.1",
     "react": "^19.0.0",
+    "react-canvas-draw": "^1.2.1",
     "react-dom": "^19.0.0",
-    "next": "15.1.1"
+    "tldraw": "^3.6.1"
   },
   "devDependencies": {
     "typescript": "^5",
