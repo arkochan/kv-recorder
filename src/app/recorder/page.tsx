@@ -1,147 +1,124 @@
 "use client";
-import { useRef, useState, MouseEvent, useEffect } from "react";
-import { LazyBrush } from "lazy-brush";
 
-type Point = { x: number; y: number; time: number }; // Includes time
-type Stroke = Point[];
+import React, { useEffect, useRef, useState } from "react";
 
-export default function Whiteboard() {
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+interface Point {
+  x: number;
+  y: number;
+  time: number;
+}
+
+interface Stroke {
+  points: Point[];
+  color: string;
+  width: number;
+}
+
+interface Session {
+  strokes: Stroke[];
+}
+
+let startTime = Date.now();
+export default function Page() {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isDrawing, setIsDrawing] = useState(false);
-  const [strokes, setStrokes] = useState<Stroke[]>([]);
-  const [currentStroke, setCurrentStroke] = useState<Stroke>([]);
-  const [startTime, setStartTime] = useState<number | null>(null); // Track drawing start time
+  const [sessions, setSessions] = useState<Session[]>([{ strokes: [] }]);
+  const [currentSession, setCurrentSession] = useState<Session>({
+    strokes: [],
+  });
+  const [currentStroke, setCurrentStroke] = useState<Stroke | null>(null);
 
-  // Initialize LazyBrush
-  const lazyBrush = useRef(
-    new LazyBrush({ radius: 10, enabled: true }),
-  ).current;
+  useEffect(() => {
+    const canvas = canvasRef.current as HTMLCanvasElement;
+    const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
 
-  const getDeltaTime = () => {
-    return startTime ? Date.now() - startTime : 0;
-  };
+    // Get the device pixel ratio, falling back to 1.
+    var dpr = window.devicePixelRatio || 1;
+    // Get the size of the canvas in CSS pixels.
+    var rect = canvas.getBoundingClientRect();
+    // Give the canvas pixel dimensions of their CSS
+    // size * the device pixel ratio.
+    dpr = Math.max(dpr, 2);
+    canvas.width = rect.width * dpr;
+    canvas.height = rect.height * dpr;
 
-  const startDrawing = (event: MouseEvent<HTMLCanvasElement>) => {
-    if (!canvasRef.current) return;
+    // Scale all drawing operations by the dpr, so you
+    // don't have to worry about the difference.
+    ctx.scale(dpr, dpr);
 
-    const rect = canvasRef.current.getBoundingClientRect();
-    const x = event.clientX - rect.left;
-    const y = event.clientY - rect.top;
+    // Disable zooming
+  }, []);
 
-    // Update LazyBrush to start from the initial point
-    lazyBrush.update({ x, y }, { both: true });
-
-    setCurrentStroke([{ x, y, time: getDeltaTime() }]); // Add time
+  function startDrawing(
+    event:
+      | React.MouseEvent<HTMLCanvasElement>
+      | React.PointerEvent<HTMLCanvasElement>
+  ) {
     setIsDrawing(true);
-    setStartTime(Date.now());
-  };
-
-  const draw = (event: MouseEvent<HTMLCanvasElement>) => {
-    if (!isDrawing || !canvasRef.current) return;
-
-    const rect = canvasRef.current.getBoundingClientRect();
-    const x = event.clientX - rect.left;
-    const y = event.clientY - rect.top;
-
-    // Update LazyBrush with the new pointer position
-    lazyBrush.update({ x, y });
-
-    // Get the smoothed position from LazyBrush
-    const { x: smoothX, y: smoothY } = lazyBrush.getBrush();
-
-    const newPoint: Point = { x: smoothX, y: smoothY, time: getDeltaTime() };
-    setCurrentStroke((prev) => [...prev, newPoint]);
-
-    const ctx = canvasRef.current.getContext("2d");
-    if (!ctx) return;
-
-    ctx.lineWidth = 2;
+    const ctx = canvasRef.current?.getContext("2d") as CanvasRenderingContext2D;
+    ctx.lineWidth = 5;
     ctx.lineCap = "round";
     ctx.strokeStyle = "black";
 
-    if (currentStroke.length > 0) {
-      const lastPoint = currentStroke[currentStroke.length - 1];
+    const pos = getPosition(event);
+    const newStroke: Stroke = { points: [pos], color: "#000000", width: 1 };
+    setCurrentStroke(newStroke);
+  }
+
+  function stopDrawing() {
+    setIsDrawing(false);
+    if (currentStroke) {
+      currentSession.strokes.push(currentStroke);
+      setCurrentSession(currentSession);
+    }
+    setCurrentStroke(null);
+  }
+
+  function draw(
+    event:
+      | React.MouseEvent<HTMLCanvasElement>
+      | React.PointerEvent<HTMLCanvasElement>
+  ) {
+    if (!isDrawing) return;
+
+    const ctx = canvasRef.current?.getContext("2d") as CanvasRenderingContext2D;
+    const pos = getPosition(event);
+    if (currentStroke) {
+      currentStroke.points.push(pos);
       ctx.beginPath();
-      ctx.moveTo(lastPoint.x, lastPoint.y);
-      ctx.lineTo(smoothX, smoothY);
+      ctx.moveTo(
+        currentStroke.points[currentStroke.points.length - 2].x,
+        currentStroke.points[currentStroke.points.length - 2].y
+      );
+      ctx.lineTo(pos.x, pos.y);
       ctx.stroke();
     }
-  };
+  }
 
-  const stopDrawing = () => {
-    setIsDrawing(false);
-    if (currentStroke.length > 0) {
-      setStrokes((prev) => [...prev, currentStroke]);
-    }
-    setCurrentStroke([]);
-  };
-
-  const clearCanvas = () => {
-    if (!canvasRef.current) return;
-
-    const ctx = canvasRef.current.getContext("2d");
-    if (!ctx) return;
-
-    ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
-    setStrokes([]);
-  };
-
-  const saveStrokes = () => {
-    console.log("Saved strokes with timestamps:", strokes);
-    alert("Drawing saved with timestamps to console!");
-  };
-
-  const playback = async () => {
-    if (!canvasRef.current) return;
-
-    const ctx = canvasRef.current.getContext("2d");
-    if (!ctx) return;
-
-    clearCanvas();
-
-    for (const stroke of strokes) {
-      for (let i = 0; i < stroke.length - 1; i++) {
-        const point = stroke[i];
-        const nextPoint = stroke[i + 1];
-
-        ctx.lineWidth = 2;
-        ctx.lineCap = "round";
-        ctx.strokeStyle = "black";
-
-        ctx.beginPath();
-        ctx.moveTo(point.x, point.y);
-        ctx.lineTo(nextPoint.x, nextPoint.y);
-        ctx.stroke();
-
-        const delay = nextPoint.time - point.time; // Calculate delay between points
-        await new Promise((resolve) => setTimeout(resolve, delay));
-      }
-    }
-  };
+  function getPosition(
+    event:
+      | React.MouseEvent<HTMLCanvasElement>
+      | React.PointerEvent<HTMLCanvasElement>
+  ) {
+    const canvas = canvasRef.current as HTMLCanvasElement;
+    const rect = canvas.getBoundingClientRect();
+    return {
+      x: event.clientX - rect.left,
+      y: event.clientY - rect.top,
+      time: Date.now() - startTime,
+    };
+  }
 
   return (
-    <div
-      style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
-    >
-      <canvas
-        ref={canvasRef}
-        width={800}
-        height={600}
-        style={{ border: "1px solid black", cursor: "crosshair" }}
-        onMouseDown={startDrawing}
-        onMouseMove={draw}
-        onMouseUp={stopDrawing}
-        onMouseLeave={stopDrawing}
-      />
-      <div style={{ marginTop: "10px" }}>
-        <button onClick={clearCanvas} style={{ marginRight: "10px" }}>
-          Clear
-        </button>
-        <button onClick={saveStrokes} style={{ marginRight: "10px" }}>
-          Save
-        </button>
-        <button onClick={playback}>Playback</button>
-      </div>
-    </div>
+    <canvas
+      ref={canvasRef}
+      onMouseDown={startDrawing}
+      onMouseUp={stopDrawing}
+      onMouseMove={draw}
+      onPointerDown={startDrawing}
+      onPointerUp={stopDrawing}
+      onPointerMove={draw}
+      className="w-full h-full"
+    />
   );
 }
