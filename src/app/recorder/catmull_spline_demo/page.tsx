@@ -141,6 +141,7 @@ export default function Page() {
   }
 
   async function drawSession(session: Session, smoothness = 0) {
+    var lastStrokeTime = 0;
     //clear out the canvas
     clearCanvas();
     const canvas = canvasRef.current as HTMLCanvasElement;
@@ -152,7 +153,10 @@ export default function Page() {
       ctx.strokeStyle = stroke.color;
       ctx.lineCap = "round";
       // replace the points with the catmull rom spline points
+      //sleep for the time it takes the strokes to start
+      await sleep(stroke.points[0].time - lastStrokeTime);
       await drawStroke(stroke, ctx);
+      lastStrokeTime = stroke.points[stroke.points.length - 1].time;
       // stroke.points = getCatmullRomSpline(stroke.points);
       // drawStroke(stroke, ctx, "green");
     }
