@@ -4,12 +4,12 @@ import React, { use, useEffect, useRef, useState } from "react";
 import { draw, startDraw, endDraw, clear, setDpr, setSmoothness } from "../_service/whiteboard";
 import { Point } from "@/types/types";
 import { init } from "next/dist/compiled/webpack/webpack";
-
+import { cn } from "@/lib/utils/tailwind";
 let startTime = Date.now();
 var memCanvas = document.createElement('canvas');
 var memCtx = memCanvas.getContext('2d');
 
-export default function Canvas() {
+export default function Canvas({ className }: { className?: string }) {
   const [smooth, setSmooth] = useState(6);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   function getMousePos(e: React.MouseEvent<HTMLCanvasElement>): Point {
@@ -76,23 +76,9 @@ export default function Canvas() {
     ctx.lineCap = "round";
     ctx.lineJoin = "round";
   }, [canvasRef]);
-  useEffect(() => {
-    setSmoothness(smooth);
-  }, [smooth]);
+
   return (
-    <>
-      <button onClick={() => clear(canvasRef.current as HTMLCanvasElement, memCanvas)}>
-        Clear
-      </button>
-      {/*a slider that adjusts the smoothness from 1 to 20 and sets in using a setSmoothness state*/}
-      <input
-        type="range"
-        min="1"
-        max="20"
-        value={smooth}
-        onChange={(e) => setSmooth(parseInt(e.target.value))}
-      />
-      <p>Smoothness: {smooth}</p>
+    <div className={cn("", className)}>
       <canvas
         ref={canvasRef}
         onMouseDown={mouseDown}
@@ -101,8 +87,8 @@ export default function Canvas() {
         onPointerDown={pointerDown}
         onPointerUp={pointerUp}
         onPointerMove={pointerMove}
-        className="border w-full h-full"
+        className="border w-full flex-1"
       />
-    </>
+    </div>
   );
 }

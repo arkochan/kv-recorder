@@ -11,6 +11,7 @@
   "dependencies": {
     "atrament": "^4.4.1",
     "clsx": "^2.1.1",
+    "function-plot": "^1.25.1",
     "lazy-brush": "^2.0.2",
     "next": "15.1.1",
     "perfect-freehand": "^1.2.2",
