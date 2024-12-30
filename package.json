@@ -10,12 +10,14 @@
   },
   "dependencies": {
     "atrament": "^4.4.1",
+    "clsx": "^2.1.1",
     "lazy-brush": "^2.0.2",
     "next": "15.1.1",
     "perfect-freehand": "^1.2.2",
     "react": "^19.0.0",
     "react-canvas-draw": "^1.2.1",
     "react-dom": "^19.0.0",
+    "tailwind-merge": "^2.6.0",
     "tldraw": "^3.6.1"
   },
   "devDependencies": {
