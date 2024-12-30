@@ -1,19 +1,16 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
-import { draw, startDraw, endDraw, clearCanvas, initCanvas } from "../_service/whiteboard";
+import React, { use, useEffect, useRef, useState } from "react";
+import { draw, startDraw, endDraw, clear, setDpr, setSmoothness } from "../_service/whiteboard";
 import { Point } from "@/types/types";
 import { init } from "next/dist/compiled/webpack/webpack";
 
-
 let startTime = Date.now();
+var memCanvas = document.createElement('canvas');
+var memCtx = memCanvas.getContext('2d');
 
 export default function Canvas() {
-  useEffect(() => {
-    if (canvasRef.current) {
-      initCanvas(canvasRef.current);
-    }
-  }, []);
+  const [smooth, setSmooth] = useState(6);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   function getMousePos(e: React.MouseEvent<HTMLCanvasElement>): Point {
     if (!canvasRef.current) return { x: 0, y: 0, time: 0 };
@@ -39,11 +36,11 @@ export default function Canvas() {
   };
   function mouseMove(e: React.MouseEvent<HTMLCanvasElement>) {
     const p = getMousePos(e);
-    draw(p, canvasRef.current as HTMLCanvasElement);
+    draw(p, canvasRef.current as HTMLCanvasElement, memCanvas);
   };
   function mouseUp(e: React.MouseEvent<HTMLCanvasElement>) {
     const p = getMousePos(e);
-    endDraw(p, canvasRef.current as HTMLCanvasElement);
+    endDraw(p, canvasRef.current as HTMLCanvasElement, memCanvas);
   }
   function pointerDown(e: React.PointerEvent<HTMLCanvasElement>) {
     const p = getPointerPos(e);
@@ -51,18 +48,51 @@ export default function Canvas() {
   };
   function pointerMove(e: React.PointerEvent<HTMLCanvasElement>) {
     const p = getPointerPos(e);
-    draw(p, canvasRef.current as HTMLCanvasElement);
+    draw(p, canvasRef.current as HTMLCanvasElement, memCanvas);
   };
   function pointerUp(e: React.PointerEvent<HTMLCanvasElement>) {
     const p = getPointerPos(e);
-    endDraw(p, canvasRef.current as HTMLCanvasElement);
+    endDraw(p, canvasRef.current as HTMLCanvasElement, memCanvas);
   }
 
+  useEffect(() => {
+    if (!canvasRef.current) return;
+    //get dpr and set memanvas and canvas value
+    const dpr = Math.max(window.devicePixelRatio || 1, 2);
+    setDpr(dpr);
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
+    const rect = canvas.getBoundingClientRect();
+    canvas.width = rect.width * dpr;
+    canvas.height = rect.height * dpr;
+    memCanvas.width = rect.width * dpr;
+    memCanvas.height = rect.height * dpr;
+    ctx.scale(dpr, dpr);
+    const memCtx = memCanvas.getContext('2d');
+    if (!memCtx) return;
+    memCtx.scale(dpr, dpr);
+    if (!ctx) return;
+    ctx.lineWidth = 5;
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+  }, [canvasRef]);
+  useEffect(() => {
+    setSmoothness(smooth);
+  }, [smooth]);
   return (
     <>
-      <button onClick={() => clearCanvas(canvasRef.current as HTMLCanvasElement)}>
+      <button onClick={() => clear(canvasRef.current as HTMLCanvasElement, memCanvas)}>
         Clear
       </button>
+      {/*a slider that adjusts the smoothness from 1 to 20 and sets in using a setSmoothness state*/}
+      <input
+        type="range"
+        min="1"
+        max="20"
+        value={smooth}
+        onChange={(e) => setSmooth(parseInt(e.target.value))}
+      />
+      <p>Smoothness: {smooth}</p>
       <canvas
         ref={canvasRef}
         onMouseDown={mouseDown}
