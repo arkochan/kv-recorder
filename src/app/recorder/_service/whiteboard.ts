@@ -1,10 +1,11 @@
-import { Point } from "@/types/types";
+import { Point, Stroke } from "@/types/types";
 
 var started = false;
 
 // create an in-memory canvas
 
 var points: Point[] = [];
+var strokes: Stroke[] = [];
 var SMOOTH_FACTOR = 6;
 
 export function startDraw(p: Point) {
@@ -23,17 +24,21 @@ export function setSmoothness(smoothness: number) {
 }
 export function draw(p: Point, canvas: HTMLCanvasElement, memCanvas: HTMLCanvasElement) {
     if (!started) return;
+    console.log("draw points length", points.length);
     const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     const w = canvas.width / dpr;
     const h = canvas.height / dpr;
     ctx.drawImage(memCanvas, 0, 0, w, h);
 
-    if (size % SMOOTH_FACTOR === 0)
-        points.push(p)
+    if (size % SMOOTH_FACTOR !== 0)
+        points.pop();
+
+    points.push(p);
     size++;
+    console.log(size);
     drawPoints(ctx as CanvasRenderingContext2D, points);
-};
+}
 
 export function endDraw(p: Point, canvas: HTMLCanvasElement, memCanvas: HTMLCanvasElement) {
     if (!started) return;
@@ -56,12 +61,9 @@ export function clear(canvas: HTMLCanvasElement, memCanvas: HTMLCanvasElement) {
     memCtx.clearRect(0, 0, canvas.width, canvas.height);
 };
 
-
-
-
 function drawPoints(ctx: CanvasRenderingContext2D, points: Point[]) {
     // draw a basic circle instead
-    if (points.length < 6) {
+    if (size < 6) {
         var b = points[0];
         ctx.beginPath(), ctx.arc(b.x, b.y, ctx.lineWidth / 2, 0, Math.PI * 2, !0), ctx.closePath(), ctx.fill();
         return
@@ -75,9 +77,3 @@ function drawPoints(ctx: CanvasRenderingContext2D, points: Point[]) {
     }
     ctx.stroke()
 }
-
-// Creates an object with x and y defined,
-// set to the mouse position relative to the state's canvas
-// If you wanna be super-correct this can be tricky,
-// we have to worry about padding and borders
-// takes an event and a reference to the canvas
