@@ -78,17 +78,15 @@ export default function Canvas({ className }: { className?: string }) {
   }, [canvasRef]);
 
   return (
-    <div className={cn("", className)}>
-      <canvas
-        ref={canvasRef}
-        onMouseDown={mouseDown}
-        onMouseUp={mouseUp}
-        onMouseMove={mouseMove}
-        onPointerDown={pointerDown}
-        onPointerUp={pointerUp}
-        onPointerMove={pointerMove}
-        className="border w-full flex-1"
-      />
-    </div>
+    <canvas
+      className="border-2 border-green-500 min-h-screen"
+      ref={canvasRef}
+      onMouseDown={mouseDown}
+      onMouseUp={mouseUp}
+      onMouseMove={mouseMove}
+      onPointerDown={pointerDown}
+      onPointerUp={pointerUp}
+      onPointerMove={pointerMove}
+    />
   );
 }

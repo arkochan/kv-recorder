@@ -15,13 +15,13 @@ export default function page() {
     setSmoothness(smooth);
   }, [smooth]);
   return (
-    <div className="relative min-h-screen flex flex-col">
-      <Canvas className="w-full" />
+    <div className="relative max-h-screen flex flex-col">
+      <Canvas className="" />
       <Presentation className="-z-10 shadow-md absolute rounded-xl right-0 top-1/2 -translate-y-full border h-52 w-72 flex justify-center items-center" />
       <Camera className="absolute" />
       <Toolbox className="absolute" />
       <InfoBar className="absolute" />
-      <Controls className="absolute " smooth={smooth} setSmooth={setSmooth} />
+      <Controls className="absolute bottom-0" smooth={smooth} setSmooth={setSmooth} />
     </div>
   );
 }
