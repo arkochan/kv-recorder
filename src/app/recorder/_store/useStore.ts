@@ -1,5 +1,5 @@
 import { Session } from '@/types/types';
-import create from 'zustand';
+import { create } from 'zustand';
 
 interface canvasState {
     smooth: number;
@@ -11,9 +11,9 @@ interface canvasState {
 
 }
 
-export const useStore = create<canvasState>((set: ({ }) => void) => ({
+export const useStore = create<canvasState>((set) => ({
     smooth: 5,
-    setSmooth: (smooth: number) => set({ smooth }),
+    setSmooth: (smooth) => set({ smooth }),
     sessions: [],
-    setSessions: (sessions: Session[]) => set({ sessions }),
+    setSessions: (sessions) => set({ sessions }),
 }));
