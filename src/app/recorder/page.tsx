@@ -17,7 +17,7 @@ export default function page() {
   return (
     <div className="relative min-h-screen flex flex-col">
       <Canvas className="w-full" />
-      <Presentation className="shadow-md absolute rounded-xl right-0 top-1/2 -translate-y-full border h-52 w-72 flex justify-center items-center" />
+      <Presentation className="-z-10 shadow-md absolute rounded-xl right-0 top-1/2 -translate-y-full border h-52 w-72 flex justify-center items-center" />
       <Camera className="absolute" />
       <Toolbox className="absolute" />
       <InfoBar className="absolute" />
