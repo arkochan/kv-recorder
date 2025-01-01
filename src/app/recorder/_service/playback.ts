@@ -24,6 +24,7 @@ export async function playback(session: Session, canvas: HTMLCanvasElement, memC
 async function drawStroke(
     stroke: Stroke,
     ctx: CanvasRenderingContext2D,
+    dpr = 2,
     color?: string
 ) {
     const points = stroke.points;
@@ -60,7 +61,10 @@ async function drawStroke(
         //erase all
         ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
         //put mem 
-        ctx.drawImage(memCanvas, 0, 0);
+        const w = memCanvas.width / dpr;
+        const h = memCanvas.height / dpr;
+
+        ctx.drawImage(memCanvas, 0, 0, w, h);
         //stroke the whole line 
         ctx.stroke();
     }
