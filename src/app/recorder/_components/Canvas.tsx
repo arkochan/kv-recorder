@@ -5,23 +5,14 @@ import { draw, startDraw, endDraw, clear, setDpr, setSmoothness } from "../_serv
 import { Point } from "@/types/types";
 import { init } from "next/dist/compiled/webpack/webpack";
 import { cn } from "@/lib/utils/tailwind";
+import { getMousePos } from '../_service/whiteboard'
 let startTime = Date.now();
 
 export default function Canvas({ className, canvasRef, memCanvas }: { className?: string, canvasRef: React.RefObject<HTMLCanvasElement | null>, memCanvas: HTMLCanvasElement }) {
   var memCtx = memCanvas.getContext('2d');
   const [smooth, setSmooth] = useState(6);
-  function getMousePos(e: React.MouseEvent<HTMLCanvasElement>): Point {
-    if (!canvasRef.current) return { x: 0, y: 0, time: 0 };
-    const rect = canvasRef.current.getBoundingClientRect();
-    return {
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top,
-      time: Date.now() - startTime,
-    };
-  }
-  function getPointerPos(e: React.PointerEvent<HTMLCanvasElement>): Point {
-    if (!canvasRef.current) return { x: 0, y: 0, time: 0 };
-    const rect = canvasRef.current.getBoundingClientRect();
+  function getPointerPos(e: React.PointerEvent<HTMLCanvasElement>, canvas: HTMLCanvasElement): Point {
+    const rect = canvas.getBoundingClientRect();
     return {
       x: e.clientX - rect.left,
       y: e.clientY - rect.top,
@@ -29,27 +20,27 @@ export default function Canvas({ className, canvasRef, memCanvas }: { className?
     };
   }
   function mouseDown(e: React.MouseEvent<HTMLCanvasElement>) {
-    const p = getMousePos(e);
+    const p = getMousePos(e, canvasRef.current as HTMLCanvasElement);
     startDraw(p);
   };
   function mouseMove(e: React.MouseEvent<HTMLCanvasElement>) {
-    const p = getMousePos(e);
+    const p = getMousePos(e, canvasRef.current as HTMLCanvasElement);
     draw(p, canvasRef.current as HTMLCanvasElement, memCanvas);
   };
   function mouseUp(e: React.MouseEvent<HTMLCanvasElement>) {
-    const p = getMousePos(e);
+    const p = getMousePos(e, canvasRef.current as HTMLCanvasElement);
     endDraw(p, canvasRef.current as HTMLCanvasElement, memCanvas);
   }
   function pointerDown(e: React.PointerEvent<HTMLCanvasElement>) {
-    const p = getPointerPos(e);
+    const p = getPointerPos(e, canvasRef.current as HTMLCanvasElement);
     startDraw(p);
   };
   function pointerMove(e: React.PointerEvent<HTMLCanvasElement>) {
-    const p = getPointerPos(e);
+    const p = getPointerPos(e, canvasRef.current as HTMLCanvasElement);
     draw(p, canvasRef.current as HTMLCanvasElement, memCanvas);
   };
   function pointerUp(e: React.PointerEvent<HTMLCanvasElement>) {
-    const p = getPointerPos(e);
+    const p = getPointerPos(e, canvasRef.current as HTMLCanvasElement);
     endDraw(p, canvasRef.current as HTMLCanvasElement, memCanvas);
   }
 

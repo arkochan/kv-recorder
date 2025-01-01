@@ -12,7 +12,6 @@ export function startDraw(p: Point) {
     points.push(p), size++;
     started = true;
 };
-
 let size = 0;
 var dpr = 2;
 
@@ -82,4 +81,18 @@ function drawPoints(ctx: CanvasRenderingContext2D, points: Point[]) {
 
 export function getStrokes() {
     return strokes;
+}
+var startTime = Date.now();
+
+export function setStartTime(time: number) {
+    startTime = Date.now();
+}
+
+export function getMousePos(e: React.MouseEvent<HTMLCanvasElement>, canvas: HTMLCanvasElement): Point {
+    const rect = canvas.getBoundingClientRect();
+    return {
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top,
+        time: Date.now() - startTime,
+    };
 }
