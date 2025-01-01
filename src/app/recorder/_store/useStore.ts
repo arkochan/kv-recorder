@@ -16,4 +16,6 @@ export const useStore = create<canvasState>((set) => ({
     setSmooth: (smooth) => set({ smooth }),
     sessions: [],
     setSessions: (sessions) => set({ sessions }),
+    startTime: 0,
+    setStartTime: (startTime) => set({ startTime }),
 }));
