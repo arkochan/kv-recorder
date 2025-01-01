@@ -49,6 +49,7 @@ export function endDraw(p: Point, canvas: HTMLCanvasElement, memCanvas: HTMLCanv
     const w = memCanvas.width / dpr;
     const h = memCanvas.height / dpr;
     memCanvas.getContext('2d')?.drawImage(canvas, 0, 0, w, h);
+    strokes.push({ points: points, width: 2, color: 'black' });
     points = [];
     size = 0;
 };
@@ -58,7 +59,8 @@ export function clear(canvas: HTMLCanvasElement, memCanvas: HTMLCanvasElement) {
     const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     const memCtx = memCanvas.getContext('2d') as CanvasRenderingContext2D;
-    memCtx.clearRect(0, 0, canvas.width, canvas.height);
+    memCtx.clearRect(0, 0, memCanvas.width, memCanvas.height);
+    console.log("cleared");
 };
 
 function drawPoints(ctx: CanvasRenderingContext2D, points: Point[]) {
@@ -76,4 +78,8 @@ function drawPoints(ctx: CanvasRenderingContext2D, points: Point[]) {
         ctx.quadraticCurveTo(points[i].x, points[i].y, c, d)
     }
     ctx.stroke()
+}
+
+export function getStrokes() {
+    return strokes;
 }
