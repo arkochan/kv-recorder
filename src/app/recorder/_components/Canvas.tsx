@@ -6,12 +6,10 @@ import { Point } from "@/types/types";
 import { init } from "next/dist/compiled/webpack/webpack";
 import { cn } from "@/lib/utils/tailwind";
 let startTime = Date.now();
-var memCanvas = document.createElement('canvas');
-var memCtx = memCanvas.getContext('2d');
 
-export default function Canvas({ className }: { className?: string }) {
+export default function Canvas({ className, canvasRef, memCanvas }: { className?: string, canvasRef: React.RefObject<HTMLCanvasElement | null>, memCanvas: HTMLCanvasElement }) {
+  var memCtx = memCanvas.getContext('2d');
   const [smooth, setSmooth] = useState(6);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
   function getMousePos(e: React.MouseEvent<HTMLCanvasElement>): Point {
     if (!canvasRef.current) return { x: 0, y: 0, time: 0 };
     const rect = canvasRef.current.getBoundingClientRect();

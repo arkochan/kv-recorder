@@ -1,7 +1,6 @@
 import React from 'react'
 import { cn } from '@/lib/utils/tailwind';
-
-export default function Controls({ className, smooth, setSmooth }: { className?: string, smooth: number, setSmooth: (value: number) => void }) {
+export default function Controls({ className, clearBoard, smooth, setSmooth, play }: { className?: string, smooth: number, setSmooth: (value: number) => void, clearBoard: () => void, play: () => void }) {
 
     return (
         <div className={cn("flex flex-row", className)}>
@@ -16,7 +15,10 @@ export default function Controls({ className, smooth, setSmooth }: { className?:
                     onChange={(e) => setSmooth(parseInt(e.target.value))}
                 />
             </div>
-
+            {/*clear button*/}
+            <button onClick={() => clearBoard()} className={cn("bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded")}>Clear</button>
+            {/*play Button*/}
+            <button onClick={() => play()} className={cn("bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded")}>Play</button>
         </div>
 
     )
