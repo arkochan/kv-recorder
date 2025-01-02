@@ -11,6 +11,18 @@ export default {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        primary: {
+          1: "#295f48", // Color 1
+          2: "#204c39", // Color 2
+          3: "#18392b", // Color 3
+        },
+        light: {
+          1: "#dbf0e6", // Light Color 1
+          2: "#b7e1cd", // Light Color 2
+        },
+        grey: "#eeeeee", // Grey
+        white: "#f8fcfa", // White
+
       },
     },
   },
