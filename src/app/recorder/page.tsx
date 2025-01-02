@@ -27,13 +27,13 @@ export default function page() {
 
   }
   return (
-    <div className="relative max-h-screen flex flex-col">
+    <div className="relative max-h-screen flex flex-col bg-grey">
       <Canvas canvasRef={canvasRef} memCanvas={memCanvas} className="" />
       <Presentation className="-z-10 shadow-md absolute rounded-xl right-0 top-1/2 -translate-y-full border h-52 w-72 flex justify-center items-center" />
-      <Camera className="absolute" />
-      <Toolbox className="absolute" />
-      <InfoBar className="absolute" />
-      <Controls play={play} clearBoard={clearBoard} className="absolute bottom-0" smooth={smooth} setSmooth={setSmooth} />
+      <Camera className="absolute bg-white rounded-full w-32 h-32 right-10 bottom-10" />
+      <Toolbox className="tool-container-vertical absolute -translate-y-1/2 top-1/2 left-4" />
+      <InfoBar className="tool-container-horizontal absolute right-4 top-4" />
+      <Controls play={play} clearBoard={clearBoard} className="tool-container-horizontal absolute bottom-10 left-10" smooth={smooth} setSmooth={setSmooth} />
     </div>
   );
 }
