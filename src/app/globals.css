@@ -1,3 +1,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+.tool-container-horizontal {
+    @apply shadow h-14 flex justify-center items-center gap-2 bg-white px-2 rounded-2xl;
+}
+
+.tool-container-vertical{
+    @apply shadow w-14 flex justify-center items-center gap-2 bg-white py-2 rounded-2xl;
+}
