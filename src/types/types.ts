@@ -17,8 +17,7 @@ export interface Session {
 
 export interface Eraser_path {
   points: Point[];
-  color: string;
-  width: number;
+  radius: number;
 }
 
 // Define the Operation interface with Event details
