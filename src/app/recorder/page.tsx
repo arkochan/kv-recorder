@@ -8,7 +8,8 @@ import Toolbox from "./_components/Toolbox";
 import { useEffect, useRef, useState } from "react";
 import { clear, setSmoothness, getStrokes } from "./_service/whiteboard";
 import { playback } from "./_service/playback";
-
+import { Session } from "@/types/types";
+import AudioRecorder from "./_components/AudioRecorder";
 
 export default function page() {
   const [smooth, setSmooth] = useState(5);
@@ -22,7 +23,7 @@ export default function page() {
   }
   function play() {
     const strokes = getStrokes();
-    const currentSession = { strokes: strokes };
+    const currentSession = { strokes: strokes } as Session;
     playback(currentSession, canvasRef.current as HTMLCanvasElement, memCanvas);
 
   }
@@ -34,6 +35,7 @@ export default function page() {
       <Toolbox className="tool-container-vertical absolute -translate-y-1/2 top-1/2 left-4" />
       <InfoBar className="tool-container-horizontal absolute right-4 top-4" />
       <Controls play={play} clearBoard={clearBoard} className="tool-container-horizontal absolute bottom-10 left-10" smooth={smooth} setSmooth={setSmooth} />
+      {/* <AudioRecorder className="tool-container-horizontal absolute bottom-10 left-10" /> */}
     </div>
   );
 }
