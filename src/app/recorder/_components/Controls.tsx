@@ -6,16 +6,8 @@ type State = 'idle' | 'recording' | 'paused' | 'playing' | 'stopped';
 
 export default function Controls({
   className,
-  clearBoard,
-  smooth,
-  setSmooth,
-  play,
 }: {
   className?: string;
-  smooth: number;
-  setSmooth: (value: number) => void;
-  clearBoard: () => void;
-  play: () => void;
 }) {
   const [state, setState] = useState<State>('idle');
   const [recordingTime, setRecordingTime] = useState(0);
@@ -49,7 +41,6 @@ export default function Controls({
 
   function handlePlay() {
     setState('playing');
-    play(); // Call the passed `play` function
   }
 
   return (
