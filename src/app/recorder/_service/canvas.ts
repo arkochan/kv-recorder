@@ -47,7 +47,6 @@ export class CanvasService {
   }
 
   handleMouseMove(e: React.MouseEvent<HTMLCanvasElement>) {
-    console.log("mouse move");
     const p = this.getMousePos(e);
 
   }
@@ -92,10 +91,10 @@ export class CanvasService {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     const memCtx = memCanvas.getContext('2d') as CanvasRenderingContext2D;
     memCtx.clearRect(0, 0, memCanvas.width, memCanvas.height);
-    console.log("cleared");
   };
 
   drawPoints() {
+    console.log(this.whiteboard.points);
     // draw a basic circle instead
     if (!this.ctx) return;
     // if (!this.canvas) return;

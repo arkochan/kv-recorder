@@ -16,9 +16,9 @@ export default function Canvas({ className, canvasRef }: { className?: string, c
     <canvas
       className="border-2 border-green-500 min-h-screen"
       ref={canvasRef}
-      onMouseDown={canvas.handleMouseDown}
-      onMouseUp={canvas.handleMouseDown}
-      onMouseMove={canvas.handleMouseMove}
+      onMouseDown={(e) => canvas.handleMouseDown(e)}
+      onMouseUp={(e) => canvas.handleMouseDown(e)}
+      onMouseMove={(e) => canvas.handleMouseMove(e)}
     // onPointerDown={pointerDown}
     // onPointerUp={pointerUp}
     // onPointerMove={pointerMove}
