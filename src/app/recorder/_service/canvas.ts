@@ -1,13 +1,19 @@
 import { Point, Stroke } from "@/types/types";
 import { Whiteboard } from "./whiteboard";
+import { Tool, ToolConfig } from "./tools/tool";
+import { PenTool } from "./tools/penTool";
 
 export class CanvasService {
   dpr: number;
+  started: boolean = false;
+  currentTool: string = "pen";
   canvas: HTMLCanvasElement | null;
   ctx: CanvasRenderingContext2D | null;
   memCanvas: HTMLCanvasElement | null;
   memCtx: CanvasRenderingContext2D | null;
   whiteboard = new Whiteboard({ smoothFactor: 4 });
+  tools: Record<string, Tool> = {};
+
 
   constructor() {
     this.canvas = null;
@@ -16,9 +22,7 @@ export class CanvasService {
     this.memCtx = null;
     this.dpr = 2;
   }
-
   init({ canvas, dpr }: { canvas: HTMLCanvasElement, dpr: number }) {
-    this.dpr = dpr;
     this.canvas = canvas;
     this.ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
     const rect = canvas.getBoundingClientRect();
@@ -36,61 +40,32 @@ export class CanvasService {
     this.ctx.lineWidth = 5;
     this.ctx.lineCap = "round";
     this.ctx.lineJoin = "round";
-  }
 
+    const toolConfig: ToolConfig = {
+      whiteboard: this.whiteboard,
+      ctx: this.ctx,
+      canvas: this.canvas,
+      memCanvas: this.memCanvas,
+      dpr: this.dpr,
+    }
+
+    this.tools.pen = new PenTool(toolConfig);
+  }
 
   handleMouseDown(e: React.MouseEvent<HTMLCanvasElement>) {
     const p = this.getMousePos(e)
-    this.whiteboard.pointerDown(p);
+    this.tools[this.currentTool].down(p);
   }
 
   handleMouseMove(e: React.MouseEvent<HTMLCanvasElement>) {
-    const p = this.getMousePos(e);
-    this.whiteboard.pointerMove(p);
-    this.draw();
+    const p = this.getMousePos(e)
+    this.tools[this.currentTool].down(p);
   }
+
   handleMouseUp(e: React.MouseEvent<HTMLCanvasElement>) {
-    this.whiteboard.pointerUp(this.getMousePos(e));
-    this.draw();
+    const p = this.getMousePos(e)
+    this.tools[this.currentTool].down(p);
   }
-  clearCanvas() {
-    if (!this.ctx) return;
-    if (!this.canvas) return;
-    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-  }
-  putMemCanvas() {
-    if (!this.memCanvas) return;
-    if (!this.canvas) return;
-    if (!this.ctx) return;
-
-    const w = this.canvas.width / this.dpr;
-    const h = this.canvas.height / this.dpr;
-    this.ctx.drawImage(this.memCanvas, 0, 0, w, h);
-  }
-  draw() {
-    if (!this.whiteboard.started) return;
-    this.clearCanvas();
-    this.putMemCanvas();
-    this.drawPoints();
-  }
-  clearMemCanvas() {
-    this.memCanvas?.getContext('2d')?.clearRect(0, 0, memCanvas.width, memCanvas.height);
-  }
-  saveCanvas() {
-    if (!this.memCanvas) return;
-    const w = this.memCanvas.width / this.dpr;
-    const h = this.memCanvas.height / this.dpr;
-    this.memCanvas.getContext('2d')?.drawImage(canvas, 0, 0, w, h);
-  }
-  endDraw(p: Point, canvas: HTMLCanvasElement, memCanvas: HTMLCanvasElement) {
-    if (!this.whiteboard.started) return;
-    this.whiteboard.pointerUp(p);
-    this.drawPoints();
-    this.clearMemCanvas();
-    this.saveCanvas();
-
-
-  };
 
   // 
   clear(canvas: HTMLCanvasElement, memCanvas: HTMLCanvasElement) {
@@ -100,27 +75,6 @@ export class CanvasService {
     memCtx.clearRect(0, 0, memCanvas.width, memCanvas.height);
   };
 
-  drawPoints() {
-    console.log(this.whiteboard.points);
-    // draw a basic circle instead
-    if (!this.ctx) return;
-    // if (!this.canvas) return;
-    const points = this.whiteboard.points;
-    if (this.whiteboard.size < 6) {
-      var b = this.whiteboard.points[0];
-      this.ctx.beginPath(), this.ctx.arc(b.x, b.y, this.ctx.lineWidth / 2, 0, Math.PI * 2, !0), this.ctx.closePath(), this.ctx.fill();
-      return
-    }
-
-    this.ctx.beginPath(), this.ctx.moveTo(points[0].x, points[0].y);
-    // draw a bunch of quadratics, using the average of two points as the control point
-    for (let i = 1; i < points.length - 1; i++) {
-      var c = (points[i].x + points[i + 1].x) / 2,
-        d = (points[i].y + points[i + 1].y) / 2;
-      this.ctx.quadraticCurveTo(points[i].x, points[i].y, c, d)
-    }
-    this.ctx.stroke()
-  }
   getMousePos(e: React.MouseEvent<HTMLCanvasElement>) {
     if (!this.canvas) return { x: 0, y: 0, time: 0 };
     const rect = this.canvas.getBoundingClientRect();
