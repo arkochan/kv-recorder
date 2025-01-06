@@ -41,17 +41,17 @@ export class CanvasService {
 
   handleMouseDown(e: React.MouseEvent<HTMLCanvasElement>) {
     const p = this.getMousePos(e)
-
     this.whiteboard.pointerDown(p);
-    this.draw();
   }
 
   handleMouseMove(e: React.MouseEvent<HTMLCanvasElement>) {
     const p = this.getMousePos(e);
-
+    this.whiteboard.pointerMove(p);
+    this.draw();
   }
   handleMouseUp(e: React.MouseEvent<HTMLCanvasElement>) {
-
+    this.whiteboard.pointerUp(this.getMousePos(e));
+    this.draw();
   }
   clearCanvas() {
     if (!this.ctx) return;
@@ -73,15 +73,22 @@ export class CanvasService {
     this.putMemCanvas();
     this.drawPoints();
   }
-
+  clearMemCanvas() {
+    this.memCanvas?.getContext('2d')?.clearRect(0, 0, memCanvas.width, memCanvas.height);
+  }
+  saveCanvas() {
+    if (!this.memCanvas) return;
+    const w = this.memCanvas.width / this.dpr;
+    const h = this.memCanvas.height / this.dpr;
+    this.memCanvas.getContext('2d')?.drawImage(canvas, 0, 0, w, h);
+  }
   endDraw(p: Point, canvas: HTMLCanvasElement, memCanvas: HTMLCanvasElement) {
     if (!this.whiteboard.started) return;
     this.whiteboard.pointerUp(p);
     this.drawPoints();
-    memCanvas.getContext('2d')?.clearRect(0, 0, memCanvas.width, memCanvas.height);
-    const w = memCanvas.width / this.dpr;
-    const h = memCanvas.height / this.dpr;
-    memCanvas.getContext('2d')?.drawImage(canvas, 0, 0, w, h);
+    this.clearMemCanvas();
+    this.saveCanvas();
+
 
   };
 
