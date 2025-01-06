@@ -43,7 +43,6 @@ export class Whiteboard {
     if (!this.started)
       return;
     this.started = false;
-    console.log(this.started);
     if (this.mode === "draw") {
       this.points.push(p);
       this.strokes.push({ points: this.points, width: 2, color: 'black' });
