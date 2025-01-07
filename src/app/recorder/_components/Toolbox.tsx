@@ -1,16 +1,30 @@
-import React from 'react'
+import React from 'react';
 import { cn } from '@/lib/utils/tailwind';
 import ButtonTB from '@/components/ButtonTB';
+import { useStore } from '../_store/useStore'; // Adjust the import path as necessary
+
+const tools = [
+  { name: 'mouse', svgSrc: '/mouse-pointer-2.svg' },
+  { name: 'pencil', svgSrc: '/pencil.svg' },
+  { name: 'eraser', svgSrc: '/eraser.svg' },
+  { name: 'rectangle', svgSrc: '/rectangle-horizontal.svg' },
+  { name: 'circle', svgSrc: '/circle.svg' },
+];
 
 export default function Toolbox({ className }: { className?: string }) {
-    return (
-        <div className={cn("flex-col h-fit ", className)}>
-            <ButtonTB svgSrc="/mouse-pointer-2.svg" onClick={() => { }} />
-            <ButtonTB svgSrc="/pencil.svg" onClick={() => { }} />
-            <ButtonTB svgSrc="/eraser.svg" onClick={() => { }} />
-            <ButtonTB svgSrc="/rectangle-horizontal.svg" onClick={() => { }} />
-            <ButtonTB svgSrc="/circle.svg" onClick={() => { }} />
+  const setCurrentTool = useStore((state) => state.setCurrentTool);
+  const currentTool = useStore((state) => state.currentTool);
 
-        </div>
-    )
+  return (
+    <div className={cn("flex-col h-fit", className)}>
+      {tools.map((tool) => (
+        <ButtonTB
+          key={tool.name}
+          active={currentTool === tool.name}
+          svgSrc={tool.svgSrc}
+          onClick={() => setCurrentTool(tool.name)}
+        />
+      ))}
+    </div>
+  );
 }
