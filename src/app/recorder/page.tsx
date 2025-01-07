@@ -15,9 +15,14 @@ import AudioRecorder from "./_components/AudioRecorder";
 
 export default function page() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const canvas = new CanvasService();
+
+  useEffect(() => {
+    canvas.init({ canvas: canvasRef.current as HTMLCanvasElement, dpr: 2 });
+  }, []);
   return (
     <div className="relative max-h-screen flex flex-col bg-grey">
-      <Canvas canvasRef={canvasRef} className="" />
+      <Canvas canvasRef={canvasRef} canvas={canvas} className="" />
       <Presentation className="-z-10 shadow-md absolute rounded-xl right-0 top-1/2 -translate-y-full border h-52 w-72 flex justify-center items-center" />
       <Camera className="absolute bg-white rounded-full w-32 h-32 right-10 bottom-10" />
       <Toolbox className="tool-container-vertical absolute -translate-y-1/2 top-1/2 left-4" />
