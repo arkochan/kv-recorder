@@ -4,12 +4,13 @@ import { Tool } from "./tool";
 export class PenTool extends Tool {
 
   drawPoints() {
+    console.log("drawPoints", "executed");
     console.log(this.whiteboard.points);
     // draw a basic circle instead
     if (!this.ctx) return;
     // if (!this.canvas) return;
     const points = this.whiteboard.points;
-    if (this.whiteboard.size < 6) {
+    if (this.whiteboard.size < 2) {
       var b = this.whiteboard.points[0];
       this.ctx.beginPath(), this.ctx.arc(b.x, b.y, this.ctx.lineWidth / 2, 0, Math.PI * 2, !0), this.ctx.closePath(), this.ctx.fill();
       return
@@ -26,23 +27,31 @@ export class PenTool extends Tool {
   }
 
   down(p: Point) {
+    console.log("down", "executed");
+
     this.whiteboard.pointerDown(p);
-    // this.canvas.started = true;
+    this.whiteboard.started = true;
   }
 
   move(p: Point) {
     if (!this.whiteboard.started) return;
+    this.whiteboard.pointerMove(p);
     this.clearCanvas();
     this.putMemCanvas();
     this.drawPoints();
+
   }
 
   up(p: Point,) {
+    console.log("up", "executed");
+
     if (!this.whiteboard.started) return;
-    this.whiteboard.pointerUp(p);
     this.drawPoints();
     this.clearMemCanvas();
     this.saveCanvas();
+
+    this.whiteboard.pointerUp(p);
+    this.whiteboard.started = false;
   }
 }
 

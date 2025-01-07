@@ -47,24 +47,26 @@ export class CanvasService {
       canvas: this.canvas,
       memCanvas: this.memCanvas,
       dpr: this.dpr,
+      canvasService: this,
     }
 
     this.tools.pen = new PenTool(toolConfig);
   }
 
   handleMouseDown(e: React.MouseEvent<HTMLCanvasElement>) {
+    console.log("handleMouseDown", "executed");
     const p = this.getMousePos(e)
     this.tools[this.currentTool].down(p);
   }
 
   handleMouseMove(e: React.MouseEvent<HTMLCanvasElement>) {
     const p = this.getMousePos(e)
-    this.tools[this.currentTool].down(p);
+    this.tools[this.currentTool].move(p);
   }
 
   handleMouseUp(e: React.MouseEvent<HTMLCanvasElement>) {
     const p = this.getMousePos(e)
-    this.tools[this.currentTool].down(p);
+    this.tools[this.currentTool].up(p);
   }
 
   // 

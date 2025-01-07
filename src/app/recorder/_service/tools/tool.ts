@@ -1,4 +1,6 @@
 import { Point } from "@/types/types";
+import { CanvasService } from "../canvas";
+import { Whiteboard } from "../whiteboard";
 
 export interface ToolConfig {
   whiteboard: any;
@@ -6,10 +8,11 @@ export interface ToolConfig {
   canvas: HTMLCanvasElement;
   memCanvas: HTMLCanvasElement;
   dpr: number;
+  canvasService: CanvasService;
 }
 
 export abstract class Tool {
-  whiteboard: any;
+  whiteboard: Whiteboard;
   ctx: CanvasRenderingContext2D;
   canvas: HTMLCanvasElement;
   memCanvas: HTMLCanvasElement;
