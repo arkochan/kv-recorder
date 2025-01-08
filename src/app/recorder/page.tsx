@@ -16,7 +16,9 @@ import AudioRecorder from "./_components/AudioRecorder";
 export default function page() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const canvas = new CanvasService();
-
+  function changeTool(tool: string) {
+    canvas.setTool(tool);
+  }
   useEffect(() => {
     canvas.init({ canvas: canvasRef.current as HTMLCanvasElement, dpr: 2 });
   }, []);
@@ -25,7 +27,7 @@ export default function page() {
       <Canvas canvasRef={canvasRef} canvas={canvas} className="" />
       <Presentation className="-z-10 shadow-md absolute rounded-xl right-0 top-1/2 -translate-y-full border h-52 w-72 flex justify-center items-center" />
       <Camera className="absolute bg-white rounded-full w-32 h-32 right-10 bottom-10" />
-      <Toolbox changeTool={(tool: string) => canvas.setTool(tool)} className="tool-container-vertical absolute -translate-y-1/2 top-1/2 left-4" />
+      <Toolbox changeTool={changeTool} className="tool-container-vertical absolute -translate-y-1/2 top-1/2 left-4" />
       <InfoBar className="tool-container-horizontal absolute right-4 top-4" />
       <Controls className="tool-container-horizontal absolute bottom-10 left-10" />
       {/* <AudioRecorder className="tool-container-horizontal absolute bottom-10 left-10" /> */}
