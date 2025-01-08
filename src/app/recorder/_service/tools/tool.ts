@@ -18,11 +18,6 @@ export abstract class Tool {
   memCanvas: HTMLCanvasElement;
   dpr: number;
 
-  drawStrokes() {
-    for (const stroke of this.whiteboard.strokes) {
-      this.drawPoints(stroke.points);
-    }
-  }
   drawPoints(points: Point[]) {
     console.log("drawPoints", "executed");
     console.log(this.whiteboard.points);
