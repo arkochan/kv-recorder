@@ -52,10 +52,8 @@ export class CanvasService {
       dpr: this.dpr,
       canvasService: this,
     }
+    this.whiteboard.initTools(toolConfig);
 
-    this.tools.pen = new PenTool(toolConfig);
-    this.tools.rectangle = new RectangleTool(toolConfig);
-    this.tools.circle = new CircleTool(toolConfig);
   }
 
   setTool(tool: string) {
@@ -65,25 +63,23 @@ export class CanvasService {
   }
   handleMouseDown(e: React.MouseEvent<HTMLCanvasElement>) {
     const p = this.getMousePos(e)
-    this.tools[this.currentTool].down(p);
+    this.whiteboard.pointerDown(p);
   }
 
   handleMouseMove(e: React.MouseEvent<HTMLCanvasElement>) {
     const p = this.getMousePos(e)
-    this.tools[this.currentTool].move(p);
+    this.whiteboard.pointerMove(p);
   }
 
   handleMouseUp(e: React.MouseEvent<HTMLCanvasElement>) {
     const p = this.getMousePos(e)
-    this.tools[this.currentTool].up(p);
+    this.whiteboard.pointerUp(p);
   }
 
   // 
   clear(canvas: HTMLCanvasElement, memCanvas: HTMLCanvasElement) {
-    const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    const memCtx = memCanvas.getContext('2d') as CanvasRenderingContext2D;
-    memCtx.clearRect(0, 0, memCanvas.width, memCanvas.height);
+    this.ctx?.clearRect(0, 0, canvas.width, canvas.height);
+    this.memCtx?.clearRect(0, 0, memCanvas.width, memCanvas.height);
   };
 
   getMousePos(e: React.MouseEvent<HTMLCanvasElement>) {
