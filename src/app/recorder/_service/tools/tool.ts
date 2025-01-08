@@ -10,6 +10,16 @@ export interface ToolConfig {
   dpr: number;
   canvasService: CanvasService;
 }
+export interface toolDrawArgumentStarEnd {
+  startPoint: Point;
+  endPoint: Point;
+}
+
+export interface toolDrawArgumentWithPoints {
+  points: Point[];
+}
+
+export type toolDrawArgument = toolDrawArgumentStarEnd | toolDrawArgumentWithPoints;
 
 export abstract class Tool {
   whiteboard: Whiteboard;
@@ -52,7 +62,7 @@ export abstract class Tool {
     const h = this.memCanvas.height / this.dpr;
     this.memCanvas.getContext('2d')?.drawImage(this.canvas, 0, 0, w, h);
   }
-  abstract draw(endPoint: Point, points?: Point[]): void;
+  abstract draw([]: Point[]): void;
   abstract down(point: Point): void;
   abstract move(point: Point): void;
   abstract up(point: Point): void;

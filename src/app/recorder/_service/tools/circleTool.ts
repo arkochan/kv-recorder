@@ -1,11 +1,13 @@
 import { Point } from "@/types/types";
-import { Tool } from "./tool";
+import { Tool, toolDrawArgument } from "./tool";
 
 export class CircleTool extends Tool {
 
-  draw(endPoint: Point, points: Point[] = this.whiteboard.points) {
+  draw(points: Point[]) {
 
     const startPoint = points[0];
+    const endPoint = points[points.length - 1];
+
     const ctx = this.canvas.getContext("2d");
     if (!ctx) return;
 
@@ -23,7 +25,7 @@ export class CircleTool extends Tool {
     if (!this.whiteboard.started) return;
     this.clearCanvas();
     this.putMemCanvas();
-    this.draw(p);
+    this.draw(this.whiteboard.points);
 
   }
 
