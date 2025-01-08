@@ -55,6 +55,11 @@ export class CanvasService {
 
   }
 
+  public executeAction(action: string) {
+    if (action === "clear") {
+      this.clear();
+    }
+  }
   setTool(tool: string) {
     if (!this.whiteboard.tools[tool]) return;
     this.whiteboard.tool = tool;
@@ -75,9 +80,11 @@ export class CanvasService {
   }
 
   // 
-  clear(canvas: HTMLCanvasElement, memCanvas: HTMLCanvasElement) {
-    this.ctx?.clearRect(0, 0, canvas.width, canvas.height);
-    this.memCtx?.clearRect(0, 0, memCanvas.width, memCanvas.height);
+  clear() {
+    if (!this.canvas) return;
+    if (!this.memCanvas) return;
+    this.ctx?.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    this.memCtx?.clearRect(0, 0, this.memCanvas.width, this.memCanvas.height);
   };
 
   getMousePos(e: React.MouseEvent<HTMLCanvasElement>) {
