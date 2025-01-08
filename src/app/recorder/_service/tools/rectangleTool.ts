@@ -23,13 +23,10 @@ export class RectangleTool extends Tool {
 
 
   down(p: Point) {
-    this.whiteboard.pointerDown(p);
-    this.whiteboard.started = true;
   }
 
   move(p: Point) {
     if (!this.whiteboard.started) return;
-    this.whiteboard.pointerMove(p);
     this.clearCanvas();
     this.putMemCanvas();
     this.draw(p);
@@ -40,9 +37,6 @@ export class RectangleTool extends Tool {
     if (!this.whiteboard.started) return;
     this.clearMemCanvas();
     this.saveCanvas();
-    console.log("canvas Saved");
-    this.whiteboard.pointerUp(p);
-    this.whiteboard.started = false;
   }
 }
 
