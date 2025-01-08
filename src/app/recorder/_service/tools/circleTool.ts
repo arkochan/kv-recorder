@@ -3,14 +3,13 @@ import { Tool } from "./tool";
 
 export class CircleTool extends Tool {
 
-  drawCircle(p: Point) {
-    const startPoint = this.whiteboard.points[0];
-    if (!startPoint) return;
+  draw(endPoint: Point, points: Point[] = this.whiteboard.points) {
 
+    const startPoint = points[0];
     const ctx = this.canvas.getContext("2d");
     if (!ctx) return;
 
-    const radius = Math.sqrt(Math.pow(startPoint.x - p.x, 2) + Math.pow(startPoint.y - p.y, 2));
+    const radius = Math.sqrt(Math.pow(startPoint.x - endPoint.x, 2) + Math.pow(startPoint.y - endPoint.y, 2));
 
     ctx.beginPath();
     ctx.arc(startPoint.x, startPoint.y, radius, 0, 2 * Math.PI);
@@ -27,7 +26,7 @@ export class CircleTool extends Tool {
     this.whiteboard.pointerMove(p);
     this.clearCanvas();
     this.putMemCanvas();
-    this.drawCircle(p);
+    this.draw(p);
   }
 
   up(p: Point) {

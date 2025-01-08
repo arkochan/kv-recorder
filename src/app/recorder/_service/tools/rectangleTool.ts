@@ -4,18 +4,18 @@ import { Tool } from "./tool";
 
 export class RectangleTool extends Tool {
 
-  drawRectangle(p: Point) {
+  draw(endPoint: Point, points: Point[] = this.whiteboard.points) {
 
-    const startPoint = this.whiteboard.points[0];
+    const startPoint = points[0];
     if (!startPoint) return;
 
     const ctx = this.canvas.getContext("2d");
     if (!ctx) return;
 
-    const x = Math.min(startPoint.x, p.x);
-    const y = Math.min(startPoint.y, p.y);
-    const width = Math.abs(startPoint.x - p.x);
-    const height = Math.abs(startPoint.y - p.y);
+    const x = Math.min(startPoint.x, endPoint.x);
+    const y = Math.min(startPoint.y, endPoint.y);
+    const width = Math.abs(startPoint.x - endPoint.x);
+    const height = Math.abs(startPoint.y - endPoint.y);
 
     ctx.strokeRect(x, y, width, height);
   }
@@ -32,7 +32,7 @@ export class RectangleTool extends Tool {
     this.whiteboard.pointerMove(p);
     this.clearCanvas();
     this.putMemCanvas();
-    this.drawRectangle(p);
+    this.draw(p);
 
   }
 
