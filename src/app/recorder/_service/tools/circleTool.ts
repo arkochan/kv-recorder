@@ -4,7 +4,8 @@ import { Tool } from "./tool";
 export class CircleTool extends Tool {
 
   drawCircle(p: Point) {
-    const startPoint = this.whiteboard.points[0];
+    if (!this.whiteboard.currentEvent) return;
+    const startPoint = this.whiteboard.currentEvent.points[0];
     if (!startPoint) return;
 
     const ctx = this.canvas.getContext("2d");

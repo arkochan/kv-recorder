@@ -20,12 +20,13 @@ export abstract class Tool {
 
   drawPoints(points: Point[]) {
     console.log("drawPoints", "executed");
-    console.log(this.whiteboard.points);
+    if (!this.whiteboard.currentEvent) return;
+    console.log(this.whiteboard.currentEvent.points);
     // draw a basic circle instead
     if (!this.ctx) return;
     // if (!this.canvas) return;
     if (this.whiteboard.size < 2) {
-      var b = this.whiteboard.points[0];
+      var b = this.whiteboard.currentEvent.points[0];
       this.ctx.beginPath(), this.ctx.arc(b.x, b.y, this.ctx.lineWidth / 2, 0, Math.PI * 2, !0), this.ctx.closePath(), this.ctx.fill();
       return
     }
@@ -71,6 +72,7 @@ export abstract class Tool {
     const h = this.memCanvas.height / this.dpr;
     this.memCanvas.getContext('2d')?.drawImage(this.canvas, 0, 0, w, h);
   }
+
   abstract down(point: Point): void;
   abstract move(point: Point): void;
   abstract up(point: Point): void;
