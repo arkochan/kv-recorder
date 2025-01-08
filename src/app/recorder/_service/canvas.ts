@@ -14,7 +14,6 @@ export class CanvasService {
   memCanvas: HTMLCanvasElement | null;
   memCtx: CanvasRenderingContext2D | null;
   whiteboard = new Whiteboard({ smoothFactor: 4 });
-  tools: Record<string, Tool> = {};
 
 
 
@@ -57,8 +56,7 @@ export class CanvasService {
   }
 
   setTool(tool: string) {
-    if (!this.tools[tool]) return;
-    this.currentTool = tool;
+    if (!this.whiteboard.tools[tool]) return;
     this.whiteboard.tool = tool;
   }
   handleMouseDown(e: React.MouseEvent<HTMLCanvasElement>) {
