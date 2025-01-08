@@ -15,6 +15,7 @@ export class CanvasService {
   tools: Record<string, Tool> = {};
 
 
+
   constructor() {
     this.canvas = null;
     this.ctx = null;
@@ -53,6 +54,10 @@ export class CanvasService {
     this.tools.pen = new PenTool(toolConfig);
   }
 
+  setTool(tool: string) {
+    this.currentTool = tool;
+    this.whiteboard.tool = tool;
+  }
   handleMouseDown(e: React.MouseEvent<HTMLCanvasElement>) {
     console.log("handleMouseDown", "executed");
     const p = this.getMousePos(e)
