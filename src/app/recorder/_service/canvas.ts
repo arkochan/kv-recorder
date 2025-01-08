@@ -3,6 +3,7 @@ import { Whiteboard } from "./whiteboard";
 import { Tool, ToolConfig } from "./tools/tool";
 import { PenTool } from "./tools/penTool";
 import { RectangleTool } from "./tools/rectangleTool";
+import { CircleTool } from "./tools/circleTool";
 
 export class CanvasService {
   dpr: number;
@@ -54,6 +55,7 @@ export class CanvasService {
 
     this.tools.pen = new PenTool(toolConfig);
     this.tools.rectangle = new RectangleTool(toolConfig);
+    this.tools.circle = new CircleTool(toolConfig);
   }
 
   setTool(tool: string) {
