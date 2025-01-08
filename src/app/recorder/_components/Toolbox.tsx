@@ -5,7 +5,7 @@ import { useStore } from '../_store/useStore'; // Adjust the import path as nece
 
 const tools = [
   { name: 'mouse', svgSrc: '/mouse-pointer-2.svg' },
-  { name: 'pencil', svgSrc: '/pencil.svg' },
+  { name: 'pen', svgSrc: '/pencil.svg' },
   { name: 'eraser', svgSrc: '/eraser.svg' },
   { name: 'rectangle', svgSrc: '/rectangle-horizontal.svg' },
   { name: 'circle', svgSrc: '/circle.svg' },
