@@ -27,8 +27,6 @@ export class PenTool extends Tool {
   }
 
   down(p: Point) {
-    console.log("down", "executed");
-
     this.whiteboard.pointerDown(p);
     this.whiteboard.started = true;
   }
@@ -43,9 +41,9 @@ export class PenTool extends Tool {
   }
 
   up(p: Point,) {
-    console.log("up", "executed");
-
     if (!this.whiteboard.started) return;
+    this.clearCanvas();
+    this.putMemCanvas();
     this.drawPoints();
     this.clearMemCanvas();
     this.saveCanvas();
