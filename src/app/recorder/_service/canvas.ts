@@ -57,13 +57,11 @@ export class CanvasService {
   }
 
   setTool(tool: string) {
-    console.log("currentTool", tool);
     if (!this.tools[tool]) return;
     this.currentTool = tool;
     this.whiteboard.tool = tool;
   }
   handleMouseDown(e: React.MouseEvent<HTMLCanvasElement>) {
-    console.log("handleMouseDown", "executed");
     const p = this.getMousePos(e)
     this.tools[this.currentTool].down(p);
   }
