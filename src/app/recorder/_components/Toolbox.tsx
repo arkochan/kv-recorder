@@ -11,9 +11,13 @@ const tools = [
   { name: 'circle', svgSrc: '/circle.svg' },
 ];
 
-export default function Toolbox({ className }: { className?: string }) {
+export default function Toolbox({ className, changeTool }: { className?: string, changeTool: (tool: string) => void }) {
   const setCurrentTool = useStore((state) => state.setCurrentTool);
   const currentTool = useStore((state) => state.currentTool);
+  function handleToolChange(tool: string) {
+    changeTool(tool);
+    setCurrentTool(tool);
+  }
 
   return (
     <div className={cn("flex-col h-fit", className)}>
@@ -22,7 +26,7 @@ export default function Toolbox({ className }: { className?: string }) {
           key={tool.name}
           active={currentTool === tool.name}
           svgSrc={tool.svgSrc}
-          onClick={() => setCurrentTool(tool.name)}
+          onClick={() => handleToolChange(tool.name)}
         />
       ))}
     </div>
