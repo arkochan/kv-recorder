@@ -3,9 +3,9 @@ import { Tool } from "./tool";
 
 export class PenTool extends Tool {
   draw(endPoint: Point, points: Point[] = this.whiteboard.points) {
-    // draw a basic circle instead
+    console.log("draw", "executed");
     if (!this.ctx) return;
-    // if (!this.canvas) return;
+
     if (this.whiteboard.points.length < 2) {
       var b = this.whiteboard.points[0];
       this.ctx.beginPath(), this.ctx.arc(b.x, b.y, this.ctx.lineWidth / 2, 0, Math.PI * 2, !0), this.ctx.closePath(), this.ctx.fill();
@@ -23,29 +23,23 @@ export class PenTool extends Tool {
   }
 
   down(p: Point) {
-    this.whiteboard.pointerDown(p);
-    this.whiteboard.started = true;
   }
 
   move(p: Point) {
     if (!this.whiteboard.started) return;
-    this.whiteboard.pointerMove(p);
     this.clearCanvas();
     this.putMemCanvas();
     this.draw(p, this.whiteboard.points);
-
   }
 
   up(p: Point) {
     if (!this.whiteboard.started) return;
+    console.log("up", "executed");
     this.clearCanvas();
     this.putMemCanvas();
     this.draw(p);
     this.clearMemCanvas();
     this.saveCanvas();
-
-    this.whiteboard.pointerUp(p);
-    this.whiteboard.started = false;
   }
 }
 
