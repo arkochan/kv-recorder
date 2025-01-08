@@ -3,6 +3,7 @@ import { Tool, ToolConfig } from "./tools/tool";
 import { CircleTool } from "./tools/circleTool";
 import { PenTool } from "./tools/penTool";
 import { RectangleTool } from "./tools/rectangleTool";
+import { CanvasService } from "./canvas";
 
 export class Whiteboard {
   public points: Point[] = [];
@@ -14,10 +15,12 @@ export class Whiteboard {
   public tool: string = "pen";
   public startTime: number = 0;
   tools: Record<string, Tool> = {};
+  canvasService: CanvasService;
 
-  constructor({ smoothFactor }: { smoothFactor: number }) {
+  constructor({ smoothFactor, canvasService }: { smoothFactor: number, canvasService: CanvasService }) {
     this.smoothFactor = smoothFactor;
     this.Events = [];
+    this.canvasService = canvasService;
   }
   initTools(toolConfig: ToolConfig) {
 
@@ -46,6 +49,11 @@ export class Whiteboard {
     this.size++;
 
     this.tools[this.tool].move(p);
+  }
+  public clear() {
+    this.Events = [];
+    this.canvasService.clear();
+
   }
 
   pointerUp(p: Point) {
