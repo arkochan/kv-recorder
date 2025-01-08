@@ -54,10 +54,21 @@ export class CanvasService {
     this.whiteboard.initTools(toolConfig);
 
   }
-
+  public undo() {
+    this.whiteboard.undo();
+  }
+  public redo() {
+    this.whiteboard.redo();
+  }
   public executeAction(action: string) {
     if (action === "clear") {
       this.whiteboard.clear();
+    }
+    else if (action === "undo") {
+      this.whiteboard.undo();
+    }
+    else if (action === "redo") {
+      this.whiteboard.redo();
     }
   }
   setTool(tool: string) {
