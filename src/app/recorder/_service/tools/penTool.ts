@@ -2,12 +2,13 @@ import { Point } from "@/types/types";
 import { Tool } from "./tool";
 
 export class PenTool extends Tool {
-  draw(endPoint: Point, points: Point[] = this.whiteboard.points) {
-    console.log("draw", "executed");
+  draw(points: Point[]) {
+
+
     if (!this.ctx) return;
 
-    if (this.whiteboard.points.length < 2) {
-      var b = this.whiteboard.points[0];
+    if (points.length < 2) {
+      var b = points[points.length - 1];
       this.ctx.beginPath(), this.ctx.arc(b.x, b.y, this.ctx.lineWidth / 2, 0, Math.PI * 2, !0), this.ctx.closePath(), this.ctx.fill();
       return
     }
@@ -29,7 +30,7 @@ export class PenTool extends Tool {
     if (!this.whiteboard.started) return;
     this.clearCanvas();
     this.putMemCanvas();
-    this.draw(p, this.whiteboard.points);
+    this.draw(this.whiteboard.points);
   }
 
   up(p: Point) {
@@ -37,7 +38,7 @@ export class PenTool extends Tool {
     console.log("up", "executed");
     this.clearCanvas();
     this.putMemCanvas();
-    this.draw(p);
+    this.draw(this.whiteboard.points);
     this.clearMemCanvas();
     this.saveCanvas();
   }
