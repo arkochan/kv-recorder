@@ -7,7 +7,7 @@ export class Whiteboard {
   private smoothFactor = 4;
   public size = 0;
   private dpr = 2;
-  private tool: "draw" | "erase" | "recatangle" | "circle" | "line" = "draw";
+  public tool: string = "pen";
   public startTime: number = 0;
 
   constructor({ smoothFactor }: { smoothFactor: number }) {
@@ -26,8 +26,6 @@ export class Whiteboard {
   }
 
   pointerMove(p: Point) {
-    if (!this.started)
-      return;
     if (this.size % this.smoothFactor !== 0) {
       this.points.pop();
     }
@@ -35,8 +33,6 @@ export class Whiteboard {
     this.size++;
   }
   pointerUp(p: Point) {
-    if (!this.started)
-      return;
     this.started = false;
     this.points.push(p);
     this.strokes.push({ points: this.points, width: 2, color: 'black' });
