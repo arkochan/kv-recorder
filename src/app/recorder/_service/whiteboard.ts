@@ -16,12 +16,14 @@ export class Whiteboard {
   public startTime: number = 0;
   tools: Record<string, Tool> = {};
   canvasService: CanvasService;
+  head: number = 0;
 
   constructor({ smoothFactor, canvasService }: { smoothFactor: number, canvasService: CanvasService }) {
     this.smoothFactor = smoothFactor;
     this.Events = [];
     this.canvasService = canvasService;
   }
+
   initTools(toolConfig: ToolConfig) {
 
     this.tools.pen = new PenTool(toolConfig);
@@ -31,9 +33,19 @@ export class Whiteboard {
   startSession(time: number) {
     this.startTime = time;
   }
+  drawTill(index: number) {
+    for (var i = 0; i < index; i++) {
+      const event = this.Events[i];
+      this.tools[event.type].draw(event.points);
 
-
+    }
+    this.tools.pen.clearMemCanvas();
+    this.tools.pen.saveCanvas();
+  }
   pointerDown(p: Point) {
+    if (this.head !== this.Events.length) {
+      this.Events = this.Events.slice(0, this.head);
+    }
     this.started = true;
     this.size++;
     this.points.push(p);
@@ -50,10 +62,38 @@ export class Whiteboard {
 
     this.tools[this.tool].move(p);
   }
+  public draw(event: Event) {
+    this.tools[event.type].draw(event.points);
+  }
+
   public clear() {
     this.Events = [];
     this.canvasService.clear();
 
+  }
+  head_decrease() {
+    if (this.head <= 0) return false;
+    this.head--;
+    return true;
+  }
+  head_increase() {
+    if (this.head >= this.Events.length) return false;
+    this.head++;
+    return true;
+  }
+  public undo() {
+    if (!this.head_decrease()) return;
+    console.log("this.Events", this.Events);
+    console.log("this.head", this.head);
+    this.canvasService.clear();
+    this.drawTill(this.head);
+  }
+  public redo() {
+    if (!this.head_increase()) return;
+    console.log("this.Events", this.Events);
+    console.log("this.head", this.head);
+    this.canvasService.clear();
+    this.drawTill(this.head);
   }
 
   pointerUp(p: Point) {
@@ -69,7 +109,7 @@ export class Whiteboard {
     this.size = 0;
     this.points = [];
     console.log("this.Events", this.Events);
-
+    this.head++;
     this.started = false;
   }
 }
