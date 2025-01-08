@@ -13,7 +13,7 @@ export class CanvasService {
   ctx: CanvasRenderingContext2D | null;
   memCanvas: HTMLCanvasElement | null;
   memCtx: CanvasRenderingContext2D | null;
-  whiteboard = new Whiteboard({ smoothFactor: 4 });
+  whiteboard = new Whiteboard({ smoothFactor: 4, canvasService: this });
 
 
 
@@ -57,7 +57,7 @@ export class CanvasService {
 
   public executeAction(action: string) {
     if (action === "clear") {
-      this.clear();
+      this.whiteboard.clear();
     }
   }
   setTool(tool: string) {
