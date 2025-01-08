@@ -18,7 +18,6 @@ export default function Toolbox({ className, changeTool }: { className?: string,
     changeTool(tool);
     setCurrentTool(tool);
   }
-
   return (
     <div className={cn("flex-col h-fit", className)}>
       {tools.map((tool) => (
