@@ -14,9 +14,7 @@ export class PenTool extends Tool {
     this.whiteboard.pointerMove(p);
     this.clearCanvas();
     this.putMemCanvas();
-    if (this.whiteboard.currentEvent?.points) {
-      this.drawPoints(this.whiteboard.currentEvent.points);
-    }
+    this.drawPoints(this.whiteboard.points);
 
   }
 
@@ -24,10 +22,7 @@ export class PenTool extends Tool {
     if (!this.whiteboard.started) return;
     this.clearCanvas();
     this.putMemCanvas();
-
-    if (this.whiteboard.currentEvent?.points) {
-      this.drawPoints(this.whiteboard.currentEvent.points);
-    }
+    this.drawPoints(this.whiteboard.points);
     this.clearMemCanvas();
     this.saveCanvas();
 

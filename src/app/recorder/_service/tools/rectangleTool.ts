@@ -6,8 +6,7 @@ export class RectangleTool extends Tool {
 
   drawRectangle(p: Point) {
 
-    if (!this.whiteboard.currentEvent) return;
-    const startPoint = this.whiteboard.currentEvent.points[0];
+    const startPoint = this.whiteboard.points[0];
     if (!startPoint) return;
 
     const ctx = this.canvas.getContext("2d");
