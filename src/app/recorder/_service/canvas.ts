@@ -2,6 +2,7 @@ import { Point, Stroke } from "@/types/types";
 import { Whiteboard } from "./whiteboard";
 import { Tool, ToolConfig } from "./tools/tool";
 import { PenTool } from "./tools/penTool";
+import { RectangleTool } from "./tools/rectangleTool";
 
 export class CanvasService {
   dpr: number;
@@ -52,9 +53,12 @@ export class CanvasService {
     }
 
     this.tools.pen = new PenTool(toolConfig);
+    this.tools.rectangle = new RectangleTool(toolConfig);
   }
 
   setTool(tool: string) {
+    console.log("currentTool", tool);
+    if (!this.tools[tool]) return;
     this.currentTool = tool;
     this.whiteboard.tool = tool;
   }
