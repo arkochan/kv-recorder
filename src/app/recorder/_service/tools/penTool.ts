@@ -1,7 +1,7 @@
-import { Point } from "@/types/types";
-import { Tool } from "./tool";
+import { Point, Event, EventExtension } from "@/types/types";
+import { strokeTool } from "./strokeTool";
 
-export class PenTool extends Tool {
+export class PenTool extends strokeTool {
   draw(points: Point[]) {
 
 
@@ -25,7 +25,19 @@ export class PenTool extends Tool {
 
   down(p: Point) {
   }
-
+  calculateSpan(points: Point[]) {
+    var max_horizontal = 0;
+    var min_horizontal = Number.MAX_SAFE_INTEGER;
+    var max_vertical = 0;
+    var min_vertical = Number.MAX_SAFE_INTEGER;
+    for (const point of points) {
+      max_horizontal = Math.max(max_horizontal, point.x);
+      min_horizontal = Math.min(min_horizontal, point.x);
+      max_vertical = Math.max(max_vertical, point.y);
+      min_vertical = Math.min(min_vertical, point.y);
+    }
+    return { max_horizontal, min_horizontal, max_vertical, min_vertical };
+  }
   move(p: Point) {
     if (!this.whiteboard.started) return;
     this.clearCanvas();
@@ -41,6 +53,20 @@ export class PenTool extends Tool {
     this.draw(this.whiteboard.points);
     this.clearMemCanvas();
     this.saveCanvas();
+  }
+
+  isProximal(e: Event, p: Point, proximity: number): boolean {
+    for (const point of e.points) {
+      if (this.isPointProximal(point, p, proximity)) return true;
+    }
+    return false;
+
+  }
+  createExtension(points: Point[]): EventExtension {
+    return {
+      type: "pen",
+      ...this.calculateSpan(points)
+    }
   }
 }
 

@@ -1,9 +1,10 @@
-import { Point } from "@/types/types";
+
+import { Point, Event, EventExtension } from "@/types/types";
 import { CanvasService } from "../canvas";
 import { Whiteboard } from "../whiteboard";
 
 export interface ToolConfig {
-  whiteboard: any;
+  whiteboard: Whiteboard;
   ctx: CanvasRenderingContext2D;
   canvas: HTMLCanvasElement;
   memCanvas: HTMLCanvasElement;
@@ -21,7 +22,7 @@ export interface toolDrawArgumentWithPoints {
 
 export type toolDrawArgument = toolDrawArgumentStarEnd | toolDrawArgumentWithPoints;
 
-export abstract class Tool {
+export abstract class pathTool {
   whiteboard: Whiteboard;
   ctx: CanvasRenderingContext2D;
   canvas: HTMLCanvasElement;
@@ -62,8 +63,15 @@ export abstract class Tool {
     const h = this.memCanvas.height / this.dpr;
     this.memCanvas.getContext('2d')?.drawImage(this.canvas, 0, 0, w, h);
   }
-  abstract draw([]: Point[]): void;
+
+  public isPointProximal(p1: Point, p2: Point, radius: number): boolean {
+    const distance = Math.sqrt(Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2));
+    return distance <= radius;
+  }
+
   abstract down(point: Point): void;
   abstract move(point: Point): void;
   abstract up(point: Point): void;
+  abstract draw([]: Point[]): void;
+  abstract createExtension([]: Point[]): EventExtension;
 }

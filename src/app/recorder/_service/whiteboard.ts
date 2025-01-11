@@ -1,9 +1,11 @@
-import { Point, Stroke, Event } from "@/types/types";
-import { Tool, ToolConfig } from "./tools/tool";
+import { Point, Stroke, Event, BaseEvent, StrokeEvent } from "@/types/types";
+import { strokeTool } from "./tools/strokeTool";
+import { pathTool, ToolConfig } from "./tools/pathTool";
 import { CircleTool } from "./tools/circleTool";
 import { PenTool } from "./tools/penTool";
 import { RectangleTool } from "./tools/rectangleTool";
 import { CanvasService } from "./canvas";
+import { EraserTool } from "./tools/eraserTool";
 
 export class Whiteboard {
   globalEventCounter = 0;
@@ -13,9 +15,10 @@ export class Whiteboard {
   private smoothFactor = 4;
   public size = 0;
   private dpr = 2;
-  public tool: string = "pen";
+  public tool: "pen" | "rectangle" | "circle" | "eraser" = "pen";
   public startTime: number = 0;
-  tools: Record<string, Tool> = {};
+  strokeTools: Record<string, strokeTool> = {};
+  pathTools: Record<string, pathTool> = {};
   canvasService: CanvasService;
   head: number = 0;
 
@@ -26,22 +29,27 @@ export class Whiteboard {
   }
 
   initTools(toolConfig: ToolConfig) {
-
-    this.tools.pen = new PenTool(toolConfig);
-    this.tools.rectangle = new RectangleTool(toolConfig);
-    this.tools.circle = new CircleTool(toolConfig);
+    this.strokeTools.pen = new PenTool(toolConfig);
+    this.strokeTools.rectangle = new RectangleTool(toolConfig);
+    this.strokeTools.circle = new CircleTool(toolConfig);
+    this.pathTools.erase = new EraserTool(toolConfig);
   }
+
   startSession(time: number) {
     this.startTime = time;
   }
   drawTill(index: number) {
     for (var i = 0; i < index; i++) {
       const event = this.Events[i];
-      this.tools[event.type].draw(event.points);
-
+      this.getTool(event.type).draw(event.points);
+      // FIX :
+      // strokeTools.pen shodnlt be
+      this.strokeTools.pen.clearMemCanvas();
+      this.strokeTools.pen.saveCanvas();
     }
-    this.tools.pen.clearMemCanvas();
-    this.tools.pen.saveCanvas();
+  }
+  getTool(eventType: string) {
+    return this.strokeTools[eventType] || this.pathTools[eventType];
   }
   pointerDown(p: Point) {
     if (this.head !== this.Events.length) {
@@ -50,7 +58,7 @@ export class Whiteboard {
     this.started = true;
     this.size++;
     this.points.push(p);
-    this.tools[this.tool].down(p);
+    this.getTool(this.tool).down(p);
   }
 
   pointerMove(p: Point) {
@@ -61,10 +69,10 @@ export class Whiteboard {
     this.points.push(p);
     this.size++;
 
-    this.tools[this.tool].move(p);
+    this.getTool(this.tool).move(p);
   }
   public draw(event: Event) {
-    this.tools[event.type].draw(event.points);
+    this.getTool(event.type).draw(event.points);
   }
 
   public clear() {
@@ -100,15 +108,21 @@ export class Whiteboard {
     return this.globalEventCounter++;
   }
 
+  getEvent(): Event {
+    const eventExtension = this.getTool(this.tool).createExtension(this.points);
+    return {
+      id: this.getNewId(),
+      points: this.points,
+      startTime: this.points[0].time as number,
+      ...eventExtension,
+    }
+  }
+
   pointerUp(p: Point) {
     this.points.push(p);
-    this.tools[this.tool].up(p);
-    const currentEvent = {
-      type: this.tool,
-      startTime: p.time,
-      points: this.points,
-      ...(this.tool === "pen" && { stroke: { width: 2, color: 'black' } })
-    };
+    this.getTool(this.tool).up(p);
+    // if tool is in 
+    const currentEvent = this.getEvent();
     this.Events.push(currentEvent);
     this.size = 0;
     this.points = [];
