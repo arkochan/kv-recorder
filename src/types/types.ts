@@ -1,7 +1,7 @@
 export interface Point {
   x: number;
   y: number;
-  time: number;
+  time?: number;
 }
 
 export interface Stroke {
@@ -12,9 +12,14 @@ export interface Stroke {
 // Define the Operation interface with Event details
 //
 export interface ToolEvent {
+  id: number;
   type: string;
   startTime: number;
   points: Point[];
+  min_vertical: number;
+  min_horizontal: number;
+  max_vertical: number;
+  max_horizontal: number;
 }
 
 export interface StrokeEvent {
@@ -22,6 +27,10 @@ export interface StrokeEvent {
   startTime: number;
   points: Point[];
   stroke: Stroke;
+  min_vertical: number;
+  min_horizontal: number;
+  max_vertical: number;
+  max_horizontal: number;
 }
 
 export type Event = ToolEvent | StrokeEvent;
