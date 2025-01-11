@@ -1,6 +1,6 @@
 import { Point, Stroke } from "@/types/types";
 import { Whiteboard } from "./whiteboard";
-import { Tool, ToolConfig } from "./tools/tool";
+import { ToolConfig } from "./tools/tool";
 import { PenTool } from "./tools/penTool";
 import { RectangleTool } from "./tools/rectangleTool";
 import { CircleTool } from "./tools/circleTool";
@@ -72,9 +72,12 @@ export class CanvasService {
     }
   }
   setTool(tool: string) {
-    if (!this.whiteboard.tools[tool]) return;
-    this.whiteboard.tool = tool;
+
+    console.log("tool", tool);
+    if (!this.whiteboard.getTool(tool)) return;
+    this.whiteboard.tool = tool as "pen" | "rectangle" | "circle" | "eraser";
   }
+
   handleMouseDown(e: React.MouseEvent<HTMLCanvasElement>) {
     const p = this.getMousePos(e)
     this.whiteboard.pointerDown(p);
