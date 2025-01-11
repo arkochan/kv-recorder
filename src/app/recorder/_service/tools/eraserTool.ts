@@ -12,25 +12,37 @@ export class EraserTool extends pathTool {
   }
   filterEvent(p: Point, e: Event): boolean {
     if (e.type === "eraser") return false;
+    if (e.erased === true) return false;
     if (e.max_horizontal < p.x) return false;
     if (e.min_horizontal > p.x) return false;
     if (e.max_vertical < p.y) return false;
     if (e.min_vertical > p.y) return false;
-    return true;
+    return this.isElementInProximity(e, p, 10);
+  }
+  process(e: Event, p: Point) {
+    if (this.filterEvent(p, e)) {
+      if (e.type !== "eraser")
+        e.erased = true;
+      console.log("Primary Filter Capture", e);
+      this.eventIds.push(e.id);
+    }
   }
   down(p: Point) {
+    this.eventIds = [];
     for (const e of this.whiteboard.Events) {
-      if (this.filterEvent(p, e)) {
-        console.log("Primary Filter", e);
-      }
+      this.process(e, p);
     }
   }
   move(p: Point) {
     if (!this.whiteboard.started) return;
+    for (const e of this.whiteboard.Events) {
+      this.process(e, p);
+    }
+
   }
   up(p: Point) {
     if (!this.whiteboard.started) return;
-    this.eventIds = [];
+    console.log("EventIds", this.eventIds);
   }
   createExtension(points: Point[]): EventExtension {
     return {
