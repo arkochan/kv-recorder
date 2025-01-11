@@ -11,29 +11,29 @@ export interface Stroke {
 
 // Define the Operation interface with Event details
 //
-export interface ToolEvent {
+export interface BaseEvent {
   id: number;
-  type: string;
   startTime: number;
   points: Point[];
-  min_vertical: number;
-  min_horizontal: number;
-  max_vertical: number;
-  max_horizontal: number;
 }
 
 export interface StrokeEvent {
-  type: "stroke";
-  startTime: number;
-  points: Point[];
-  stroke: Stroke;
+  type: "pen" | "circle" | "rectangle";
   min_vertical: number;
   min_horizontal: number;
   max_vertical: number;
   max_horizontal: number;
 }
 
-export type Event = ToolEvent | StrokeEvent;
+
+export interface EraserEvent {
+  type: "eraser";
+  eventIds: number[];
+}
+
+export type EventExtension = (EraserEvent | StrokeEvent);
+
+export type Event = BaseEvent & EventExtension;
 
 // Define the Session interface
 export interface Session {
