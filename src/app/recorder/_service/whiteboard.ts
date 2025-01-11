@@ -32,7 +32,7 @@ export class Whiteboard {
     this.strokeTools.pen = new PenTool(toolConfig);
     this.strokeTools.rectangle = new RectangleTool(toolConfig);
     this.strokeTools.circle = new CircleTool(toolConfig);
-    this.pathTools.erase = new EraserTool(toolConfig);
+    this.pathTools.eraser = new EraserTool(toolConfig);
   }
 
   startSession(time: number) {
@@ -49,7 +49,7 @@ export class Whiteboard {
     }
   }
   getTool(eventType: string) {
-    return this.strokeTools[eventType] || this.pathTools[eventType];
+    return this.strokeTools[eventType] || this.pathTools[eventType] || false;
   }
   pointerDown(p: Point) {
     if (this.head !== this.Events.length) {
