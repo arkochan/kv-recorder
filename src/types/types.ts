@@ -23,6 +23,7 @@ export interface StrokeEvent {
   min_horizontal: number;
   max_vertical: number;
   max_horizontal: number;
+  erased?: boolean;
 }
 
 
