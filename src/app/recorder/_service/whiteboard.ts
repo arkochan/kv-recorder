@@ -6,6 +6,7 @@ import { RectangleTool } from "./tools/rectangleTool";
 import { CanvasService } from "./canvas";
 
 export class Whiteboard {
+  globalEventCounter = 0;
   public points: Point[] = [];
   public started = false;
   public Events: Event[] = [];
@@ -94,6 +95,9 @@ export class Whiteboard {
     console.log("this.head", this.head);
     this.canvasService.clear();
     this.drawTill(this.head);
+  }
+  getNewId() {
+    return this.globalEventCounter++;
   }
 
   pointerUp(p: Point) {
