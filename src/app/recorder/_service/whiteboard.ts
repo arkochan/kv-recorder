@@ -51,6 +51,10 @@ export class Whiteboard {
   getTool(eventType: string = this.tool) {
     return this.strokeTools[eventType] || this.pathTools[eventType] || false;
   }
+  getTimeDelta() {
+    if (this.startTime === 0) return 0;
+    return Date.now() - this.startTime;
+  }
   pointerDown(p: Point) {
     if (this.head !== this.Events.length) {
       this.Events = this.Events.slice(0, this.head);
