@@ -54,12 +54,43 @@ export class CanvasService {
     this.whiteboard.initTools(toolConfig);
 
   }
+  private getPointerPos(e: React.PointerEvent<HTMLCanvasElement>): Point {
+    if (!this.canvas) return { x: 0, y: 0 };
+
+    const rect = this.canvas.getBoundingClientRect();
+    return {
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top
+    };
+  }
+
+  private handlePointerDown(e: React.PointerEvent<HTMLCanvasElement>) {
+    if (this.canvas) {
+      this.canvas.setPointerCapture(e.pointerId);
+    }
+    const p = this.getPointerPos(e);
+    this.whiteboard.pointerDown(p);
+  }
+
+  private handlePointerMove(e: React.PointerEvent<HTMLCanvasElement>) {
+    const p = this.getPointerPos(e);
+    this.whiteboard.pointerMove(p);
+  }
+
+  private handlePointerUp(e: React.PointerEvent<HTMLCanvasElement>) {
+    if (this.canvas) {
+      this.canvas.releasePointerCapture(e.pointerId);
+    }
+    const p = this.getPointerPos(e);
+    this.whiteboard.pointerUp(p);
+  }
   public undo() {
     this.whiteboard.undo();
   }
   public redo() {
     this.whiteboard.redo();
   }
+
   public executeAction(action: string) {
     if (action === "clear") {
       this.whiteboard.clear();
