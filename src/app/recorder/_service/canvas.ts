@@ -124,14 +124,6 @@ export class CanvasService {
     this.whiteboard.pointerUp(p);
   }
 
-  // 
-  clear() {
-    if (!this.canvas) return;
-    if (!this.memCanvas) return;
-    this.ctx?.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    this.memCtx?.clearRect(0, 0, this.memCanvas.width, this.memCanvas.height);
-  };
-
   getMousePos(e: React.MouseEvent<HTMLCanvasElement>) {
     if (!this.canvas) return { x: 0, y: 0, time: 0 };
     const rect = this.canvas.getBoundingClientRect();
@@ -140,4 +132,11 @@ export class CanvasService {
       y: e.clientY - rect.top,
     };
   }
+  clear() {
+    if (!this.canvas) return;
+    if (!this.memCanvas) return;
+    this.ctx?.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    this.memCtx?.clearRect(0, 0, this.memCanvas.width, this.memCanvas.height);
+  };
+
 }
