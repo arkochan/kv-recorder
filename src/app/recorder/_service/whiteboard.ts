@@ -14,7 +14,7 @@ export class Whiteboard {
   public Events: Event[] = [];
   private smoothFactor = 4;
   public size = 0;
-  private dpr = 2;
+  // private dpr = 2;
   public tool: "pen" | "rectangle" | "circle" | "eraser" = "pen";
   public startTime: number = 0;
   strokeTools: Record<string, strokeTool> = {};
@@ -48,7 +48,7 @@ export class Whiteboard {
       this.strokeTools.pen.saveCanvas();
     }
   }
-  getTool(eventType: string) {
+  getTool(eventType: string = this.tool) {
     return this.strokeTools[eventType] || this.pathTools[eventType] || false;
   }
   pointerDown(p: Point) {
@@ -58,7 +58,7 @@ export class Whiteboard {
     this.started = true;
     this.size++;
     this.points.push(p);
-    this.getTool(this.tool).down(p);
+    this.getTool().down(p);
   }
 
   pointerMove(p: Point) {
@@ -69,7 +69,7 @@ export class Whiteboard {
     this.points.push(p);
     this.size++;
 
-    this.getTool(this.tool).move(p);
+    this.getTool().move(p);
   }
   public draw(event: Event) {
     this.getTool(event.type).draw(event.points);
@@ -109,7 +109,7 @@ export class Whiteboard {
   }
 
   getEvent(): Event {
-    const eventExtension = this.getTool(this.tool).createExtension(this.points);
+    const eventExtension = this.getTool().createExtension(this.points);
     return {
       id: this.getNewId(),
       points: this.points,
@@ -131,7 +131,7 @@ export class Whiteboard {
 
   pointerUp(p: Point) {
     this.points.push(p);
-    this.getTool(this.tool).up(p);
+    this.getTool().up(p);
     this.storeEvent();
     this.resetEvent();
     console.log("this.Events", this.Events);
