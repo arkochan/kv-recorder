@@ -36,7 +36,12 @@ export class Whiteboard {
   }
 
   startSession(time: number) {
-    this.startTime = time;
+    this.startTime = Date.now();
+  }
+  endSession(fn?: (events: Event[]) => void) {
+    if (fn)
+      fn(this.Events);
+    return this.Events;
   }
   drawTill(index: number) {
     for (var i = 0; i < index; i++) {
