@@ -44,7 +44,8 @@ export class EraserTool extends pathTool {
     if (!this.whiteboard.started) return;
     console.log("EventIds", this.eventIds);
   }
-  createExtension(points: Point[]): EventExtension {
+  createExtension(points: Point[]): EventExtension | false {
+    if (this.eventIds.length === 0) return false;
     return {
       type: "eraser",
       eventIds: this.eventIds,
