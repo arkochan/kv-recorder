@@ -108,8 +108,11 @@ export class Whiteboard {
     return this.globalEventCounter++;
   }
 
-  getEvent(): Event {
+  getEvent(): Event | false {
     const eventExtension = this.getTool().createExtension(this.points);
+    if (eventExtension === false) {
+      return false
+    }
     return {
       id: this.getNewId(),
       points: this.points,
@@ -120,6 +123,7 @@ export class Whiteboard {
   }
   storeEvent() {
     const currentEvent = this.getEvent();
+    if (currentEvent === false) return;
     this.Events.push(currentEvent);
     this.head++;
   }
