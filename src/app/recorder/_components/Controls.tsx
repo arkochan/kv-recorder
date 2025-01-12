@@ -1,8 +1,21 @@
 import React, { useState } from 'react';
 import { cn } from '@/lib/utils/tailwind';
 import ButtonTB from '@/components/ButtonTB';
+import IdleState from './stateComponents/IdleState';
+import RecordingState from './stateComponents/RecordingState';
+import PausedState from './stateComponents/PausedState';
+import PlayingState from './stateComponents/PlayingState';
+import StoppedState from './stateComponents/StoppedState';
 
 type State = 'idle' | 'recording' | 'paused' | 'playing' | 'stopped';
+
+interface ControlsProps {
+  state: State;
+  handleRecord: () => void;
+  handlePause: () => void;
+  handleResume: () => void;
+  handleStop: () => void;
+}
 
 export default function Controls({
   className,
@@ -26,6 +39,15 @@ export default function Controls({
   function handlePause() {
     clearInterval(timer);
     setState('paused');
+  }
+
+  function handleResume() {
+    setState('recording');
+    timer = setInterval(function () {
+      setRecordingTime(function (prev) {
+        return prev + 1;
+      });
+    }, 1000);
   }
 
   function handleStop() {
@@ -57,74 +79,11 @@ export default function Controls({
         }
       )}
     >
-      {state === 'idle' && (
-        <ButtonTB
-          svgSrc="/circle-dot.svg"
-          label="Record"
-          onClick={handleRecord}
-        />
-      )}
-      {state === 'recording' && (
-        <>
-          <ButtonTB
-            svgSrc="/pause-circle.svg"
-            label="Pause"
-            onClick={handlePause}
-          />
-          <ButtonTB
-            svgSrc="/stop-circle.svg"
-            label="Stop"
-            onClick={handleStop}
-          />
-          <ButtonTB
-            svgSrc="/x-circle.svg"
-            label="Discard"
-            onClick={handleDiscard}
-          />
-        </>
-      )}
-      {state === 'paused' && (
-        <>
-          <ButtonTB
-            svgSrc="/circle-dot.svg"
-            label="Resume"
-            onClick={handleRecord}
-          />
-          <ButtonTB
-            svgSrc="/play-circle.svg"
-            label="Play"
-            onClick={handlePlay}
-          />
-        </>
-      )}
-      {state === 'stopped' && (
-        <>
-          <ButtonTB
-            svgSrc="/play-circle.svg"
-            label="Play"
-            onClick={handlePlay}
-          />
-          <ButtonTB
-            svgSrc="/x-circle.svg"
-            label="Discard"
-            onClick={handleDiscard}
-          />
-        </>
-      )}
-      {state === 'playing' && (
-        <>
-          <ButtonTB
-            svgSrc="/pause-circle.svg"
-            label="Pause"
-            onClick={handlePause}
-          />
-          <ButtonTB
-            svgSrc="/stop-circle.svg"
-            label="Stop"
-            onClick={handleStop}
-          />
-        </>
-      )}
+      {state === 'idle' && <IdleState handleRecord={handleRecord} />}
+      {state === 'recording' && <RecordingState handlePause={handlePause} handleStop={handleStop} />}
+      {state === 'paused' && <PausedState handleResume={handleResume} handleStop={handleStop} />}
+      {state === 'playing' && <PlayingState handlePause={handlePause} handleStop={handleStop} />}
+      {state === 'stopped' && <StoppedState handleRecord={handleRecord} />}
     </div>
   );
 }
