@@ -55,6 +55,10 @@ export class Whiteboard {
     if (this.startTime === 0) return 0;
     return Date.now() - this.startTime;
   }
+
+  addTimeToPoints(p: Point) {
+    return { ...p, time: this.getTimeDelta() };
+  }
   pointerDown(p: Point) {
     if (this.head !== this.Events.length) {
       this.Events = this.Events.slice(0, this.head);
