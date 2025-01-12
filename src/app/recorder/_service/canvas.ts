@@ -1,6 +1,6 @@
 import { Point, Stroke } from "@/types/types";
 import { Whiteboard } from "./whiteboard";
-import { ToolConfig } from "./tools/tool";
+import { ToolConfig } from "./tools/pathTool";
 import { PenTool } from "./tools/penTool";
 import { RectangleTool } from "./tools/rectangleTool";
 import { CircleTool } from "./tools/circleTool";
