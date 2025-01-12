@@ -116,18 +116,24 @@ export class Whiteboard {
       startTime: this.points[0].time as number,
       ...eventExtension,
     }
+
+  }
+  storeEvent() {
+    const currentEvent = this.getEvent();
+    this.Events.push(currentEvent);
+    this.head++;
+  }
+  resetEvent() {
+    this.size = 0;
+    this.points = [];
+    this.started = false;
   }
 
   pointerUp(p: Point) {
     this.points.push(p);
     this.getTool(this.tool).up(p);
-    // if tool is in 
-    const currentEvent = this.getEvent();
-    this.Events.push(currentEvent);
-    this.size = 0;
-    this.points = [];
+    this.storeEvent();
+    this.resetEvent();
     console.log("this.Events", this.Events);
-    this.head++;
-    this.started = false;
   }
 }
