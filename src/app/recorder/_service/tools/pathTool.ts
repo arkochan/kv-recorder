@@ -73,5 +73,5 @@ export abstract class pathTool {
   abstract move(point: Point): void;
   abstract up(point: Point): void;
   abstract draw([]: Point[]): void;
-  abstract createExtension([]: Point[]): EventExtension;
+  abstract createExtension([]: Point[]): EventExtension | false;
 }
