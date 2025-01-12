@@ -107,7 +107,6 @@ export class CanvasService {
     return {
       x: e.clientX - rect.left,
       y: e.clientY - rect.top,
-      time: Date.now() - this.whiteboard.startTime,
     };
   }
 }

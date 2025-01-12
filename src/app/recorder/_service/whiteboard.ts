@@ -60,6 +60,7 @@ export class Whiteboard {
     return { ...p, time: this.getTimeDelta() };
   }
   pointerDown(p: Point) {
+    p = this.addTimeToPoints(p);
     if (this.head !== this.Events.length) {
       this.Events = this.Events.slice(0, this.head);
     }
@@ -70,6 +71,7 @@ export class Whiteboard {
   }
 
   pointerMove(p: Point) {
+    p = this.addTimeToPoints(p);
     if (!this.started) return;
     if (this.tool !== "eraser" && this.size % this.smoothFactor !== 0) {
       this.points.pop();
@@ -127,7 +129,6 @@ export class Whiteboard {
       startTime: this.points[0].time as number,
       ...eventExtension,
     }
-
   }
   storeEvent() {
     const currentEvent = this.getEvent();
@@ -140,8 +141,8 @@ export class Whiteboard {
     this.points = [];
     this.started = false;
   }
-
   pointerUp(p: Point) {
+    p = this.addTimeToPoints(p);
     this.points.push(p);
     this.getTool().up(p);
     this.storeEvent();
