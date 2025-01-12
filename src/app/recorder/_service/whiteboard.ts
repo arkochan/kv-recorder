@@ -46,6 +46,7 @@ export class Whiteboard {
   drawTill(index: number) {
     for (var i = 0; i < index; i++) {
       const event = this.Events[i];
+      if ("erased" in event && event.erased) continue;
       this.getTool(event.type).draw(event.points);
       // FIX :
       // strokeTools.pen shodnlt be
@@ -90,10 +91,13 @@ export class Whiteboard {
     this.getTool(event.type).draw(event.points);
   }
 
-  public clear() {
-    this.Events = [];
+  public clearEvents() {
     this.canvasService.clear();
+    this.resetEvent();
 
+  }
+  clearCanvas() {
+    this.canvasService.clear();
   }
   head_decrease() {
     if (this.head <= 0) return false;
@@ -145,6 +149,7 @@ export class Whiteboard {
     this.size = 0;
     this.points = [];
     this.started = false;
+    this.startTime = 0;
   }
   pointerUp(p: Point) {
     p = this.addTimeToPoints(p);
