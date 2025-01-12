@@ -24,6 +24,10 @@ export default function page() {
     canvas.executeAction(action);
   }
   useEffect(() => {
+
+    if (!canvasRef.current) return;
+    canvasRef.current.addEventListener('touchstart', (e) => e.preventDefault(), { passive: false });
+    canvasRef.current.addEventListener('touchmove', (e) => e.preventDefault(), { passive: false });
     canvas.init({ canvas: canvasRef.current as HTMLCanvasElement, dpr: 2 });
   }, []);
   return (
