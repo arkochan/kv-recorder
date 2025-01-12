@@ -73,5 +73,5 @@ export abstract class strokeTool {
   abstract draw([]: Point[]): void;
   abstract calculateSpan(points: Point[]): { max_horizontal: number, min_horizontal: number, max_vertical: number, min_vertical: number };
   abstract isProximal(e: Event, p: Point, proximity: number): boolean;
-  abstract createExtension([]: Point[]): EventExtension;
+  abstract createExtension([]: Point[]): EventExtension | false;
 }
