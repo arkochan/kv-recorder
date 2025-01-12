@@ -104,7 +104,7 @@ export class CanvasService {
 
   public executeAction(action: string) {
     if (action === "clear") {
-      this.whiteboard.clear();
+      this.whiteboard.clearEvents();
     }
     else if (action === "undo") {
       this.whiteboard.undo();
