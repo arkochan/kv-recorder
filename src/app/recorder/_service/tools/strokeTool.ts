@@ -1,4 +1,4 @@
-import { Point, Event, EventExtension } from "@/types/types";
+import { Point, Event, EventExtension, StrokeEvent } from "@/types/types";
 import { CanvasService } from "../canvas";
 import { Whiteboard } from "../whiteboard";
 
@@ -66,6 +66,11 @@ export abstract class strokeTool {
   public isPointProximal(p1: Point, p2: Point, radius: number): boolean {
     const distance = Math.sqrt(Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2));
     return distance <= radius;
+  }
+  public canDraw(e: Event): boolean {
+    if (e.type === "eraser")
+      return false;
+    return !(e.erased);
   }
   abstract down(point: Point): void;
   abstract move(point: Point): void;
