@@ -7,7 +7,13 @@ import PausedState from './stateComponents/PausedState';
 import PlayingState from './stateComponents/PlayingState';
 import StoppedState from './stateComponents/StoppedState';
 
-type State = 'idle' | 'recording' | 'paused' | 'playing' | 'stopped';
+enum State {
+  Idle = 'idle',
+  Recording = 'recording',
+  Paused = 'paused',
+  Playing = 'playing',
+  Stopped = 'stopped'
+}
 
 interface ControlsProps {
   state: State;
@@ -22,12 +28,12 @@ export default function Controls({
 }: {
   className?: string;
 }) {
-  const [state, setState] = useState<State>('idle');
+  const [state, setState] = useState<State>(State.Idle);
   const [recordingTime, setRecordingTime] = useState(0);
   let timer: NodeJS.Timeout;
 
   function handleRecord() {
-    setState('recording');
+    setState(State.Recording);
     setRecordingTime(0);
     timer = setInterval(function () {
       setRecordingTime(function (prev) {
@@ -38,11 +44,11 @@ export default function Controls({
 
   function handlePause() {
     clearInterval(timer);
-    setState('paused');
+    setState(State.Paused);
   }
 
   function handleResume() {
-    setState('recording');
+    setState(State.Recording);
     timer = setInterval(function () {
       setRecordingTime(function (prev) {
         return prev + 1;
@@ -52,38 +58,38 @@ export default function Controls({
 
   function handleStop() {
     clearInterval(timer);
-    setState('stopped');
+    setState(State.Stopped);
   }
 
   function handleDiscard() {
     clearInterval(timer);
-    setState('idle');
+    setState(State.Idle);
     setRecordingTime(0);
   }
 
   function handlePlay() {
-    setState('playing');
+    setState(State.Playing);
   }
 
   return (
     <div
       className={cn(
         'flex flex-row gap-4 p-4 rounded-lg shadow-md transition-all duration-500 ease-in-out',
-        className,
         {
-          'bg-gray-800 ': state === 'idle',
-          'bg-red-800 ': state === 'recording',
-          'bg-yellow-700': state === 'paused',
-          'bg-blue-700 ': state === 'playing',
-          'bg-gray-700 ': state === 'stopped',
-        }
+          'bg-gray-800 ': state === State.Idle,
+          'bg-red-800 ': state === State.Recording,
+          'bg-yellow-700': state === State.Paused,
+          'bg-blue-700 ': state === State.Playing,
+          'bg-gray-700 ': state === State.Stopped,
+        },
+        className,
       )}
     >
-      {state === 'idle' && <IdleState handleRecord={handleRecord} />}
-      {state === 'recording' && <RecordingState handlePause={handlePause} handleStop={handleStop} />}
-      {state === 'paused' && <PausedState handleResume={handleResume} handleStop={handleStop} />}
-      {state === 'playing' && <PlayingState handlePause={handlePause} handleStop={handleStop} />}
-      {state === 'stopped' && <StoppedState handleRecord={handleRecord} />}
+      {state === State.Idle && <IdleState handleRecord={handleRecord} />}
+      {state === State.Recording && <RecordingState handlePause={handlePause} handleStop={handleStop} />}
+      {state === State.Paused && <PausedState handleResume={handleResume} handleStop={handleStop} />}
+      {state === State.Playing && <PlayingState handlePause={handlePause} handleStop={handleStop} />}
+      {state === State.Stopped && <StoppedState handleRecord={handleRecord} />}
     </div>
   );
 }
