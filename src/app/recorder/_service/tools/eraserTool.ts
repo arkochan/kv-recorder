@@ -31,9 +31,9 @@ export class EraserTool extends pathTool {
   reDraw() {
     this.whiteboard.clearCanvas();
     for (const event of this.whiteboard.Events) {
-      if (event.type === "eraser") { console.log(event); console.log("type Eraser"); continue; }
-      if (event.erased === true) { console.log(event); console.log("erased true"); continue; }
-      if (this.eventIds.includes(event.id)) { console.log(event); console.log("Id in event id"); continue; }
+      if (event.type === "eraser") continue;
+      if (event.erased === true) continue;
+      if (this.eventIds.includes(event.id)) continue;
       this.whiteboard.getTool(event.type).draw(event.points);
     }
   }
