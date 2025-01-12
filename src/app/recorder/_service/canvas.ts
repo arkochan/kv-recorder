@@ -13,7 +13,7 @@ export class CanvasService {
   ctx: CanvasRenderingContext2D | null;
   memCanvas: HTMLCanvasElement | null;
   memCtx: CanvasRenderingContext2D | null;
-  whiteboard = new Whiteboard({ smoothFactor: 4, canvasService: this });
+  whiteboard = new Whiteboard({ smoothFactor: 2, canvasService: this });
 
 
 
