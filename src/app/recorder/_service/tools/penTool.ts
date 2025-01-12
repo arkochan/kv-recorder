@@ -4,7 +4,6 @@ import { strokeTool } from "./strokeTool";
 export class PenTool extends strokeTool {
   draw(points: Point[]) {
 
-
     if (!this.ctx) return;
 
     if (points.length < 2) {
@@ -47,7 +46,6 @@ export class PenTool extends strokeTool {
 
   up(p: Point) {
     if (!this.whiteboard.started) return;
-    console.log("up", "executed");
     this.clearCanvas();
     this.putMemCanvas();
     this.draw(this.whiteboard.points);
