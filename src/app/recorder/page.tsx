@@ -40,7 +40,7 @@ export default function page() {
         <StateToolbox executeAction={executeAction} className="tool-container-vertical mt-2 " />
       </div>
       <InfoBar className="tool-container-horizontal absolute right-4 top-4" />
-      <Controls className="tool-container-horizontal absolute bottom-10 left-10" />
+      {/* <Controls className="tool-container-horizontal absolute bottom-10 left-10" /> */}
       {/* <AudioRecorder className="tool-container-horizontal absolute bottom-10 left-10" /> */}
     </div>
   );
