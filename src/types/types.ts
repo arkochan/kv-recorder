@@ -43,3 +43,10 @@ export interface Session {
   details: string;
   events: Event[];
 }
+export interface Config {
+  [config: string]: {
+    [category: string]: {
+      [key: string]: string;
+    };
+  };
+}
