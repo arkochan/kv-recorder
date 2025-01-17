@@ -8,19 +8,30 @@ import Toolbox from "./_components/Toolbox";
 import { useEffect, useRef, useState } from "react";
 import { Whiteboard } from "./_service/whiteboard";
 import { CanvasService } from "./_service/canvas";
-
 import { playback } from "./_service/playback";
 import { Session } from "@/types/types";
 import AudioRecorder from "./_components/AudioRecorder";
 import StateToolbox from "./_components/StateToolbox";
 import Settings from "./_components/Settings";
-
+import { useKeybindings } from "@/hooks/keybindings";
+import { config } from "@/lib/cfg/config";
+import { Config } from "@/types/types";
 const canvas = new CanvasService();
+
 export default function page() {
+
+  const configRef = useRef<Config | null>(null);
+  configRef.current = loadConfig();
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const [modalOpen, setModalOpen] = useState("closed");
-
+  function getDefaultConfig() {
+    return config
+  }
+  function loadConfig() {
+    const storedConfig = localStorage.getItem("config");
+    return storedConfig ? JSON.parse(storedConfig) : getDefaultConfig();
+  }
   const closeModal = () => (
     setModalOpen("closed")
   )
@@ -41,6 +52,19 @@ export default function page() {
     canvasRef.current.addEventListener('touchmove', (e) => e.preventDefault(), { passive: false });
     canvas.init({ canvas: canvasRef.current as HTMLCanvasElement, dpr: 2 });
   }, []);
+
+  function handleKeyMatch(message: string) {
+    console.log(message);
+  };
+
+  useKeybindings(configRef, handleKeyMatch);
+
+  function updateConfig(newConfig: Config) {
+    // Update the config in localStorage and ref
+    configRef.current = newConfig;
+    localStorage.setItem("config", JSON.stringify(newConfig));
+  };
+
   return (
     <div className="relative max-h-screen flex flex-col bg-grey">
       <Canvas canvasRef={canvasRef} canvas={canvas} className="" />
@@ -53,25 +77,26 @@ export default function page() {
       <InfoBar closeModal={closeModal} setModalOpen={setModalOpen} className="tool-container-horizontal absolute right-4 top-4" />
       {/* <Controls className="tool-container-horizontal absolute bottom-10 left-10" /> */}
       {/* <AudioRecorder className="tool-container-horizontal absolute bottom-10 left-10" /> */}
-      <div
-        className={`fixed inset-0 bg-black/50 transition-opacity duration-300 ${modalOpen !== "closed" ? 'opacity-100' : 'opacity-0 pointer-events-none'
-          }`}
-        onClick={() => closeModal()}
-      >
 
+      {/* Modal Shade Bg */}
+      {/* <div */}
+      {/*   className={`fixed -z-10 inset-0 bg-black/50 transition-opacity duration-300 ${modalOpen !== "closed" ? 'opacity-100' : 'opacity-0 pointer-events-none' */}
+      {/*     }`} */}
+      {/*   onClick={() => closeModal()} */}
+      {/* > */}
+      <div
+        className={`fixed inset-0 flex items-center justify-center pointer-events-none`}
+      >
         <div
-          className={`fixed inset-0 flex items-center justify-center pointer-events-none`}
+          className={`bg-white rounded-lg p-6 w-full max-w-md transform transition-all duration-300 ${modalOpen === "settings"
+            ? 'opacity-100 translate-y-0 pointer-events-auto'
+            : 'opacity-0 translate-y-8 pointer-events-none'
+            }`}
         >
-          <div
-            className={`bg-white rounded-lg p-6 w-full max-w-md transform transition-all duration-300 ${modalOpen === "settings"
-              ? 'opacity-100 translate-y-0 pointer-events-auto'
-              : 'opacity-0 translate-y-8 pointer-events-none'
-              }`}
-          >
-            <Settings closeModal={closeModal} />
-          </div>
+          <Settings configRef={configRef} updateConfig={updateConfig} closeModal={closeModal} />
         </div>
       </div>
     </div>
+    // </div >
   );
 }
