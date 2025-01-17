@@ -56,6 +56,14 @@ export abstract class pathTool {
     this.memCanvas?.getContext('2d')?.clearRect(0, 0, this.memCanvas.width, this.memCanvas.height);
   }
 
+  public canvasToMem() {
+    if (!this.memCanvas) return;
+    if (!this.canvas) return;
+    const w = this.memCanvas.width / this.dpr;
+    const h = this.memCanvas.height / this.dpr;
+    this.memCanvas.getContext('2d')?.drawImage(this.canvas, 0, 0, w, h);
+  }
+
   saveCanvas() {
     if (!this.memCanvas) return;
     if (!this.canvas) return;
