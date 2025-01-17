@@ -13,10 +13,21 @@ import { playback } from "./_service/playback";
 import { Session } from "@/types/types";
 import AudioRecorder from "./_components/AudioRecorder";
 import StateToolbox from "./_components/StateToolbox";
+import Settings from "./_components/Settings";
 
+const canvas = new CanvasService();
 export default function page() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const canvas = new CanvasService();
+
+  const [modalOpen, setModalOpen] = useState("closed");
+
+  const closeModal = () => (
+    setModalOpen("closed")
+  )
+
+  useEffect(() => {
+    console.log("useEffect", modalOpen); // Logs whenever modalOpen changes
+  }, [modalOpen]);
   function changeTool(tool: string) {
     canvas.setTool(tool);
   }
@@ -24,7 +35,7 @@ export default function page() {
     canvas.executeAction(action);
   }
   useEffect(() => {
-
+    console.log("useEffect", "init"); // Logs whenever modalOpen changes
     if (!canvasRef.current) return;
     canvasRef.current.addEventListener('touchstart', (e) => e.preventDefault(), { passive: false });
     canvasRef.current.addEventListener('touchmove', (e) => e.preventDefault(), { passive: false });
@@ -39,9 +50,28 @@ export default function page() {
         <Toolbox changeTool={changeTool} className="tool-container-vertical  " />
         <StateToolbox executeAction={executeAction} className="tool-container-vertical mt-2 " />
       </div>
-      <InfoBar className="tool-container-horizontal absolute right-4 top-4" />
+      <InfoBar closeModal={closeModal} setModalOpen={setModalOpen} className="tool-container-horizontal absolute right-4 top-4" />
       {/* <Controls className="tool-container-horizontal absolute bottom-10 left-10" /> */}
       {/* <AudioRecorder className="tool-container-horizontal absolute bottom-10 left-10" /> */}
+      <div
+        className={`fixed inset-0 bg-black/50 transition-opacity duration-300 ${modalOpen !== "closed" ? 'opacity-100' : 'opacity-0 pointer-events-none'
+          }`}
+        onClick={() => closeModal()}
+      >
+
+        <div
+          className={`fixed inset-0 flex items-center justify-center pointer-events-none`}
+        >
+          <div
+            className={`bg-white rounded-lg p-6 w-full max-w-md transform transition-all duration-300 ${modalOpen === "settings"
+              ? 'opacity-100 translate-y-0 pointer-events-auto'
+              : 'opacity-0 translate-y-8 pointer-events-none'
+              }`}
+          >
+            <Settings closeModal={closeModal} />
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
