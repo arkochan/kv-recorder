@@ -1,4 +1,4 @@
-import { Point, Stroke } from "@/types/types";
+import { Point } from "@/types/types";
 import { Whiteboard } from "./whiteboard";
 import { ToolConfig } from "./tools/pathTool";
 import { PenTool } from "./tools/penTool";
