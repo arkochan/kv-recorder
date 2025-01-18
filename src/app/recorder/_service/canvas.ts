@@ -55,6 +55,12 @@ export class CanvasService {
 
   }
 
+  setColor(color: string) {
+    this.whiteboard.setColor(color)
+  }
+  setWidth(width: number) {
+    this.whiteboard.setWidth(width);
+  }
   readonly pointerProps = {
     onPointerDown: (e: React.PointerEvent<HTMLCanvasElement>) => this.handlePointerDown(e),
     onPointerMove: (e: React.PointerEvent<HTMLCanvasElement>) => this.handlePointerMove(e),
