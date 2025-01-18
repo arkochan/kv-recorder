@@ -2,19 +2,19 @@ import { Point, Event, EventExtension } from "@/types/types";
 import { strokeTool } from "./strokeTool";
 
 export class PenTool extends strokeTool {
-  draw(points: Point[]) {
-
+  draw(points: Point[],
+    color: string = this.whiteboard.color,
+    width: number = this.whiteboard.width): void {
     if (!this.ctx) return;
-
     if (points.length < 2) {
       var b = points[points.length - 1];
-      this.ctx.strokeStyle = "#000";
+      this.ctx.strokeStyle = color;
+      this.ctx.lineWidth = width;
       this.ctx.beginPath()
       this.ctx.arc(b.x, b.y, this.ctx.lineWidth / 2, 0, Math.PI * 2, !0)
       this.ctx.closePath(), this.ctx.fill();
       return
     }
-
     this.ctx.beginPath(), this.ctx.moveTo(points[0].x, points[0].y);
     // draw a bunch of quadratics, using the average of two points as the control point
     for (let i = 1; i < points.length - 1; i++) {
@@ -66,6 +66,8 @@ export class PenTool extends strokeTool {
   createExtension(points: Point[]): EventExtension {
     return {
       type: "pen",
+      width: this.whiteboard.width,
+      color: this.whiteboard.color,
       ...this.calculateSpan(points)
     }
   }
