@@ -1,4 +1,4 @@
-import { Point, Stroke, Event, BaseEvent, StrokeEvent } from "@/types/types";
+import { Point, Event, BaseEvent, StrokeEvent } from "@/types/types";
 import { strokeTool } from "./tools/strokeTool";
 import { pathTool, ToolConfig } from "./tools/pathTool";
 import { CircleTool } from "./tools/circleTool";
@@ -13,6 +13,8 @@ export class Whiteboard {
   public started = false;
   public Events: Event[] = [];
   private smoothFactor = 4;
+  public color = "#000000";
+  public width = 5;
   public size = 0;
   // private dpr = 2;
   public tool: "pen" | "rectangle" | "circle" | "eraser" = "pen";
@@ -50,11 +52,20 @@ export class Whiteboard {
         continue;
       }
       if ("erased" in event && event.erased) continue;
-      this.getTool(event.type).draw(event.points);
+      // this.getTool(event.type).draw(event.points);
+      this.drawEvent(event);
       // FIX :
       // strokeTools.pen shodnlt be
       this.strokeTools.pen.clearMemCanvas();
       this.strokeTools.pen.saveCanvas();
+    }
+  }
+  drawEvent(e: Event) {
+    if ('color' in e) {
+      this.getTool(e.type).draw(e.points, e.color, e.width);
+    }
+    else {
+      this.getTool(e.type).draw(e.points);
     }
   }
   getTool(eventType: string = this.tool) {
@@ -89,9 +100,6 @@ export class Whiteboard {
     this.size++;
 
     this.getTool().move(p);
-  }
-  public draw(event: Event) {
-    this.getTool(event.type).draw(event.points);
   }
 
   public clearEvents() {
