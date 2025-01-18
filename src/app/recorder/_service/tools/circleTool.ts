@@ -3,7 +3,9 @@ import { strokeTool } from "./strokeTool";
 
 export class CircleTool extends strokeTool {
 
-  draw(points: Point[]) {
+  draw(points: Point[],
+    color: string = this.whiteboard.color,
+    width: number = this.whiteboard.width): void {
 
     const startPoint = points[0];
     const endPoint = points[points.length - 1];
@@ -12,7 +14,6 @@ export class CircleTool extends strokeTool {
     if (!ctx) return;
 
     const radius = Math.sqrt(Math.pow(startPoint.x - endPoint.x, 2) + Math.pow(startPoint.y - endPoint.y, 2));
-
     ctx.beginPath();
     ctx.arc(startPoint.x, startPoint.y, radius, 0, 2 * Math.PI);
     ctx.stroke();
@@ -70,6 +71,8 @@ export class CircleTool extends strokeTool {
   createExtension(points: Point[]): EventExtension {
     return {
       type: "circle",
+      width: this.whiteboard.width,
+      color: this.whiteboard.color,
       ...this.calculateSpan(points)
     }
   }

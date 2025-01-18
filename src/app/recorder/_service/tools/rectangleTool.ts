@@ -2,16 +2,18 @@ import { Point, Event, EventExtension } from "@/types/types";
 import { strokeTool } from "./strokeTool";
 
 export class RectangleTool extends strokeTool {
-  draw(points: Point[]) {
+  draw(points: Point[],
+    color: string = this.whiteboard.color,
+    width: number = this.whiteboard.width): void {
     const startPoint = points[0];
     const endPoint = points[points.length - 1];
     const ctx = this.canvas.getContext("2d");
     if (!ctx) return;
     const x = Math.min(startPoint.x, endPoint.x);
     const y = Math.min(startPoint.y, endPoint.y);
-    const width = Math.abs(startPoint.x - endPoint.x);
+    const _width = Math.abs(startPoint.x - endPoint.x);
     const height = Math.abs(startPoint.y - endPoint.y);
-    ctx.strokeRect(x, y, width, height);
+    ctx.strokeRect(x, y, _width, height);
   }
   calculateSpan(points: Point[]) {
     const startingEdge = points[0];
@@ -114,6 +116,8 @@ export class RectangleTool extends strokeTool {
   createExtension(points: Point[]): EventExtension {
     return {
       type: "rectangle",
+      width: this.whiteboard.width,
+      color: this.whiteboard.color,
       ...this.calculateSpan(points)
     }
   }
