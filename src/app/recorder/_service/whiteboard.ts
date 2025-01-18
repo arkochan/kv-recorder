@@ -45,6 +45,13 @@ export class Whiteboard {
       fn(this.Events);
     return this.Events;
   }
+  setColor(color: string) {
+    this.color = color;
+  }
+  setWidth(width: number) {
+    this.width = width;
+  }
+
   drawTill(index: number) {
     for (var i = 0; i < index; i++) {
       const event = this.Events[i];
