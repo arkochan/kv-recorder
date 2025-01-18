@@ -8,7 +8,10 @@ export class PenTool extends strokeTool {
 
     if (points.length < 2) {
       var b = points[points.length - 1];
-      this.ctx.beginPath(), this.ctx.arc(b.x, b.y, this.ctx.lineWidth / 2, 0, Math.PI * 2, !0), this.ctx.closePath(), this.ctx.fill();
+      this.ctx.strokeStyle = "#000";
+      this.ctx.beginPath()
+      this.ctx.arc(b.x, b.y, this.ctx.lineWidth / 2, 0, Math.PI * 2, !0)
+      this.ctx.closePath(), this.ctx.fill();
       return
     }
 

@@ -4,10 +4,6 @@ export interface Point {
   time?: number;
 }
 
-export interface Stroke {
-  color?: string;
-  width: number;
-}
 
 // Define the Operation interface with Event details
 //
@@ -24,6 +20,8 @@ export interface StrokeEvent {
   max_vertical: number;
   max_horizontal: number;
   erased?: boolean;
+  color: string;
+  width: number;
 }
 
 
