@@ -76,10 +76,8 @@ export abstract class pathTool {
     const distance = Math.sqrt(Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2));
     return distance <= radius;
   }
-
-  abstract down(point: Point): void;
   abstract move(point: Point): void;
   abstract up(point: Point): void;
-  abstract draw([]: Point[]): void;
+  abstract draw(points: Point[], color: string, width: number): void;
   abstract createExtension([]: Point[]): EventExtension | false;
 }
