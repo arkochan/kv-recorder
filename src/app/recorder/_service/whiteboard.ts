@@ -46,6 +46,9 @@ export class Whiteboard {
   drawTill(index: number) {
     for (var i = 0; i < index; i++) {
       const event = this.Events[i];
+      if (event.type === "eraser") {
+        continue;
+      }
       if ("erased" in event && event.erased) continue;
       this.getTool(event.type).draw(event.points);
       // FIX :
@@ -113,13 +116,34 @@ export class Whiteboard {
     if (!this.head_decrease()) return;
     console.log("this.Events", this.Events);
     console.log("this.head", this.head);
+    const lastEvent = this.Events[this.head];
+    if (lastEvent.type === "eraser") {
+      for (const id of lastEvent.eventIds) {
+        const index = this.Events.findIndex((e) => e.id === id);
+        if ('erased' in this.Events[index]) {
+          this.Events[index].erased = false;
+        }
+      }
+    }
     this.canvasService.clear();
     this.drawTill(this.head);
+    this.strokeTools.pen.clearMemCanvas();
+    this.strokeTools.pen.saveCanvas();
   }
   public redo() {
     if (!this.head_increase()) return;
     console.log("this.Events", this.Events);
     console.log("this.head", this.head);
+
+    const undoEvent = this.Events[this.head - 1];
+    if (undoEvent.type === "eraser") {
+      for (const id of undoEvent.eventIds) {
+        const index = this.Events.findIndex((e) => e.id === id);
+        if ('erased' in this.Events[index]) {
+          this.Events[index].erased = true;
+        }
+      }
+    }
     this.canvasService.clear();
     this.drawTill(this.head);
   }
