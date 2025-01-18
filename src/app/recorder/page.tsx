@@ -16,17 +16,20 @@ import Settings from "./_components/Settings";
 import { useKeybindings } from "@/hooks/keybindings";
 import { config } from "@/lib/cfg/config";
 import { Config } from "@/types/types";
+import { useStore } from './_store/useStore'; // Adjust the import path as necessary
 const canvas = new CanvasService();
 
 export default function page() {
 
+  const setCurrentTool = useStore((state) => state.setCurrentTool);
+  const currentTool = useStore((state) => state.currentTool);
   const configRef = useRef<Config | null>(null);
   configRef.current = loadConfig();
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const [modalOpen, setModalOpen] = useState("closed");
   function getDefaultConfig() {
-    return config
+    return config;
   }
   function loadConfig() {
     const storedConfig = localStorage.getItem("config");
@@ -53,8 +56,22 @@ export default function page() {
     canvas.init({ canvas: canvasRef.current as HTMLCanvasElement, dpr: 2 });
   }, []);
 
-  function handleKeyMatch(message: string) {
-    console.log(message);
+  function handleKeyMatch({ category, action }: { category: string, action: string }) {
+    console.log(category, action);
+    switch (category) {
+      case "tools":
+        canvas.setTool(action);
+        setCurrentTool(action);
+        break;
+      case "actions":
+        canvas.executeAction(action);
+        break;
+      case "media":
+        break;
+      default:
+        console.warn(`Unhandled category: ${category}`);
+    }
+
   };
 
   useKeybindings(configRef, handleKeyMatch);
