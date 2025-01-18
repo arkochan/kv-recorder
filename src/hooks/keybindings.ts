@@ -1,5 +1,3 @@
-
-// src/hooks/useKeybindings.ts
 import { useEffect } from "react";
 import { Config } from "@/types/types";
 
@@ -7,11 +5,11 @@ import { Config } from "@/types/types";
 const matchKeybinding = (
   keyCombination: string,
   keybindings: Record<string, Record<string, string>>
-): string | null => {
+): { category: string, action: string } | null => {
   for (const [category, actions] of Object.entries(keybindings)) {
     for (const [action, key] of Object.entries(actions)) {
       if (keyCombination === key) {
-        return `${category} action detected: ${action}`;
+        return { category, action };
       }
     }
   }
@@ -21,7 +19,7 @@ const matchKeybinding = (
 // Custom hook for keybinding management
 export const useKeybindings = (
   configRef: React.RefObject<Config | null>,
-  onKeyMatch: (message: string) => void
+  onKeyMatch: ({ category, action }: { category: string, action: string }) => void
 ) => {
   // 
   useEffect(() => {
@@ -33,7 +31,6 @@ export const useKeybindings = (
         onKeyMatch(result);
       }
     };
-
     window.addEventListener("keydown", handleKeyDown);
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
