@@ -1,4 +1,4 @@
-import { Point, Stroke, Event, EventExtension } from "@/types/types";
+import { Point, Event, EventExtension } from "@/types/types";
 import { pathTool } from "./pathTool";
 
 export class EraserTool extends pathTool {
@@ -7,7 +7,7 @@ export class EraserTool extends pathTool {
     // FINISH: 
     return this.whiteboard.strokeTools[e.type].isProximal(e, p, proximity)
   }
-  draw([]: Point[]): void {
+  draw(points: Point[]) {
 
   }
   filterEvent(p: Point, e: Event): boolean {
@@ -34,7 +34,8 @@ export class EraserTool extends pathTool {
       if (event.type === "eraser") continue;
       if (event.erased === true) continue;
       // if (this.eventIds.includes(event.id)) continue;
-      this.whiteboard.getTool(event.type).draw(event.points);
+      // this.whiteboard.getTool(event.type).draw(event.points);
+      this.whiteboard.drawEvent(event);
     }
     this.clearMemCanvas();
     this.saveCanvas();
