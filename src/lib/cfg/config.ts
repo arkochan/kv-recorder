@@ -6,17 +6,17 @@ export const config = {
       eraser: "E",
       rectangle: "R",
       circle: "C",
-      selection: "S",
+      // selection: "S",
     },
     actions: {
       undo: "Ctrl+Z",
       redo: "Ctrl+Y",
       clear: "Ctrl+C",
     },
-    media: {
-      record: "Ctrl+R",
-      pause: "Ctrl+P",
-      stop: "Ctrl+S",
-    },
+    // media: {
+    //   record: "Ctrl+R",
+    //   pause: "Ctrl+P",
+    //   stop: "Ctrl+S",
+    // },
   }
 };

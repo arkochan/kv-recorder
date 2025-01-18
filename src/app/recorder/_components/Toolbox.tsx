@@ -4,7 +4,7 @@ import ButtonTB from '@/components/ButtonTB';
 import { useStore } from '../_store/useStore'; // Adjust the import path as necessary
 
 const tools = [
-  { name: 'mouse', svgSrc: '/mouse-pointer-2.svg' },
+  // { name: 'mouse', svgSrc: '/mouse-pointer-2.svg' },
   { name: 'pen', svgSrc: '/pencil.svg' },
   { name: 'eraser', svgSrc: '/eraser.svg' },
   { name: 'rectangle', svgSrc: '/rectangle-horizontal.svg' },
