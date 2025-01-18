@@ -1,6 +1,7 @@
+import { cn } from "@/lib/utils/tailwind";
 import { useState } from "react";
 
-export default function Tweaker({ className, setWidth, setColor }: { className: string, setWidth: (s: number) => void, setColor: (s: string) => void }) {
+export default function Tweaker({ className, setWidth, setColor }: { className?: string, setWidth: (s: number) => void, setColor: (s: string) => void }) {
   const [selectedColor, setSelectedColor] = useState('#000000');
   const [lineWidth, setLineWidth] = useState(4);
   const [activeColor, setActiveColor] = useState("Black");
@@ -25,14 +26,13 @@ export default function Tweaker({ className, setWidth, setColor }: { className: 
   };
 
   return (
-    <div className="tool-container-vertical ">
-      <div className="space-y-2">
-        <label className="block text-sm font-medium">Colors</label>
-        <div className="flex space-x-2">
+    <div className={cn("py-10", "tool-container-vertical")}>
+      <div className="flex flex-col items-center space-y-4">
+        <div className="flex flex-col space-y-3">
           {colors.map((color) => (
             <button
               key={color.value}
-              className={`w-8 h-8 rounded-full border-2 transition-transform ${activeColor === color.value ? 'scale-110 border-blue-500' : 'border-gray-200'
+              className={`w-6 h-6 rounded-full border-2 transition-transform ${activeColor === color.value ? 'scale-110 border-blue-500' : 'border-gray-200'
                 }`}
               style={{ backgroundColor: color.value }}
               onClick={() => handleColorClick(color.value)}
@@ -40,36 +40,20 @@ export default function Tweaker({ className, setWidth, setColor }: { className: 
             />
           ))}
         </div>
-      </div>
 
-      <div className="space-y-2">
-        <label className="block text-sm font-medium">
-          Line Width: {lineWidth}px
-        </label>
-        <input
-          type="range"
-          min="2"
-          max="10"
-          value={lineWidth}
-          onChange={handleWidthChange}
-          className="w-full"
-        />
+        <div className="h-32 flex items-center">
+          <div className="-rotate-90 transform origin-center w-32">
+            <input
+              type="range"
+              min="2"
+              max="10"
+              value={lineWidth}
+              onChange={handleWidthChange}
+              className="w-full"
+            />
+          </div>
+        </div>
       </div>
-
-      {/*  Preview  */}
-      {/* <div className="mt-4 p-4 border rounded-lg"> */}
-      {/*   <div className="text-sm font-medium mb-2">Preview</div> */}
-      {/*   <div className="h-8 flex items-center justify-center"> */}
-      {/*     <div */}
-      {/*       className="rounded-full" */}
-      {/*       style={{ */}
-      {/*         backgroundColor: selectedColor, */}
-      {/*         width: `${lineWidth}px`, */}
-      {/*         height: `${lineWidth}px` */}
-      {/*       }} */}
-      {/*     /> */}
-      {/*   </div> */}
-      {/* </div> */}
     </div>
   );
 };
