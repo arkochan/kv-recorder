@@ -9,6 +9,9 @@ export class RectangleTool extends strokeTool {
     const endPoint = points[points.length - 1];
     const ctx = this.canvas.getContext("2d");
     if (!ctx) return;
+    ctx.strokeStyle = color;
+    ctx.lineWidth = width;
+    if (!ctx) return;
     const x = Math.min(startPoint.x, endPoint.x);
     const y = Math.min(startPoint.y, endPoint.y);
     const _width = Math.abs(startPoint.x - endPoint.x);

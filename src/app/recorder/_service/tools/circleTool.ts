@@ -13,6 +13,8 @@ export class CircleTool extends strokeTool {
     const ctx = this.canvas.getContext("2d");
     if (!ctx) return;
 
+    ctx.strokeStyle = color;
+    ctx.lineWidth = width;
     const radius = Math.sqrt(Math.pow(startPoint.x - endPoint.x, 2) + Math.pow(startPoint.y - endPoint.y, 2));
     ctx.beginPath();
     ctx.arc(startPoint.x, startPoint.y, radius, 0, 2 * Math.PI);
