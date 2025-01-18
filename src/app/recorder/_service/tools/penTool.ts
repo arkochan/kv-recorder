@@ -5,6 +5,7 @@ export class PenTool extends strokeTool {
   draw(points: Point[],
     color: string = this.whiteboard.color,
     width: number = this.whiteboard.width): void {
+    console.log("color width", color, width);
     if (!this.ctx) return;
     if (points.length < 2) {
       var b = points[points.length - 1];
@@ -15,7 +16,11 @@ export class PenTool extends strokeTool {
       this.ctx.closePath(), this.ctx.fill();
       return
     }
-    this.ctx.beginPath(), this.ctx.moveTo(points[0].x, points[0].y);
+    this.ctx.beginPath()
+    this.ctx.moveTo(points[0].x, points[0].y);
+
+    this.ctx.strokeStyle = color;
+    this.ctx.lineWidth = width;
     // draw a bunch of quadratics, using the average of two points as the control point
     for (let i = 1; i < points.length - 1; i++) {
       var c = (points[i].x + points[i + 1].x) / 2,
