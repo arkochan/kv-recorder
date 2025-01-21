@@ -52,7 +52,9 @@ export class Whiteboard {
     this.straightLineModifier = true;
     console.log("this.straightLine", this.straightLineModifier);
   }
-  unSetModifier() {
+  unSetModifier(string: string) {
+    // if modifier is straight line
+    // But skinpping that check for now
     this.straightLineModifier = false;
     console.log("this.straightLine", this.straightLineModifier);
   }
