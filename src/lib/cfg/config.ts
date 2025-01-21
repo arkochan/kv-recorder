@@ -1,24 +1,21 @@
-export const config = {
+import { Config } from "@/types/types";
+export const config: Config = {
+  grid: {
+    appearance: {
+      lineColor: "#cccccc",
+      lineWidth: "0.4",
+      gridSpacing: "30",
+      backgroundColor: "#eeeeee",
+    },
+  },
   keybindings: {
     tools: {
       pen: "P",
       eraser: "E",
-      rectangle: "R",
-      circle: "C",
-      // selection: "S",
     },
     actions: {
       undo: "Ctrl+Z",
       redo: "Ctrl+Y",
-      clear: "Ctrl+C",
     },
-    modifier: {
-      straightLine: "Shift",
-    }
-    // media: {
-    //   record: "Ctrl+R",
-    //   pause: "Ctrl+P",
-    //   stop: "Ctrl+S",
-    // },
-  }
+  },
 };
