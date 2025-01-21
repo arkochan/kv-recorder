@@ -70,9 +70,9 @@ export class CanvasService {
     onPointerUp: (e: React.PointerEvent<HTMLCanvasElement>) => this.handlePointerUp(e),
     // onTouchStart: (e: React.TouchEvent<HTMLCanvasElement>) => e.preventDefault(),
     // onTouchMove: (e: React.TouchEvent<HTMLCanvasElement>) => e.preventDefault(),
-    style: {
-      touchAction: 'none'
-    }
+    // style: {
+    //   touchAction: 'none'
+    // }
   };
   private getPointerPos(e: React.PointerEvent<HTMLCanvasElement>): Point {
     if (!this.canvas) return { x: 0, y: 0 };

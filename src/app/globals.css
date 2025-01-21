@@ -8,3 +8,11 @@
 .tool-container-vertical{
     @apply shadow w-14 flex justify-center items-center gap-2 bg-white py-2 rounded-2xl;
 }
+
+.h-canvas {
+    height: calc(100vh - (13 * 24px));
+}
+
+.canvas {
+    @apply absolute top-0 left-0 w-full h-full;
+}
