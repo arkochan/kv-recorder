@@ -43,6 +43,7 @@ export class CanvasService {
     this.ctx.lineCap = "round";
     this.ctx.lineJoin = "round";
 
+
     const toolConfig: ToolConfig = {
       whiteboard: this.whiteboard,
       ctx: this.ctx,
@@ -54,7 +55,9 @@ export class CanvasService {
     this.whiteboard.initTools(toolConfig);
 
   }
-
+  setModifier(action: string) {
+    this.whiteboard.setModifier(action);
+  }
   setColor(color: string) {
     this.whiteboard.setColor(color)
   }
