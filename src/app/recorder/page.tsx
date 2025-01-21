@@ -42,6 +42,22 @@ export default function page() {
   useEffect(() => {
     console.log("useEffect", modalOpen); // Logs whenever modalOpen changes
   }, [modalOpen]);
+
+  useEffect(() => {
+    if (!canvasRef.current) return;
+
+    switch (currentTool) {
+      case 'pen':
+        canvasRef.current.style.cursor = 'url("/pencil.svg") 0 24, auto';
+        break;
+      case 'eraser':
+        canvasRef.current.style.cursor = 'url("/eraser.svg") 12 12, auto';
+        break;
+      default:
+        canvasRef.current.style.cursor = 'default';
+    }
+  }, [currentTool]);
+
   function changeTool(tool: string) {
     canvas.setTool(tool);
 
