@@ -7,21 +7,20 @@ export class PenTool extends strokeTool {
     width: number = this.whiteboard.width): void {
     console.log("color width", color, width);
     if (!this.ctx) return;
+
+    this.ctx.beginPath()
+    this.ctx.strokeStyle = color;
+    this.ctx.lineWidth = width;
     if (points.length < 2) {
+      // draw dot
       var b = points[points.length - 1];
-      this.ctx.strokeStyle = color;
-      this.ctx.lineWidth = width;
-      this.ctx.beginPath()
       this.ctx.arc(b.x, b.y, this.ctx.lineWidth / 2, 0, Math.PI * 2, !0)
       this.ctx.closePath(), this.ctx.fill();
       return
     }
-    this.ctx.beginPath()
-    this.ctx.moveTo(points[0].x, points[0].y);
 
-    this.ctx.strokeStyle = color;
-    this.ctx.lineWidth = width;
     // draw a bunch of quadratics, using the average of two points as the control point
+    this.ctx.moveTo(points[0].x, points[0].y);
     for (let i = 1; i < points.length - 1; i++) {
       var c = (points[i].x + points[i + 1].x) / 2,
         d = (points[i].y + points[i + 1].y) / 2;
