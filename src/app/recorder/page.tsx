@@ -17,6 +17,7 @@ import { useKeybindings } from "@/hooks/keybindings";
 import { config } from "@/lib/cfg/config";
 import { Config } from "@/types/types";
 import { useStore } from './_store/useStore'; // Adjust the import path as necessary
+import useGridGenerator from "@/hooks/useGridGenerator";
 const canvas = new CanvasService();
 
 export default function page() {
@@ -26,6 +27,7 @@ export default function page() {
   const configRef = useRef<Config | null>(null);
   configRef.current = loadConfig();
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const gridCanvasRef = useRef<HTMLCanvasElement>(null);
 
   const [modalOpen, setModalOpen] = useState("closed");
   function getDefaultConfig() {
@@ -57,7 +59,6 @@ export default function page() {
         canvasRef.current.style.cursor = 'default';
     }
   }, [currentTool]);
-
   function changeTool(tool: string) {
     canvas.setTool(tool);
 
@@ -101,6 +102,7 @@ export default function page() {
 
   useKeybindings(configRef, keyDownAction, keyUpAction);
 
+
   function updateConfig(newConfig: Config) {
     // Update the config in localStorage and ref
     configRef.current = newConfig;
@@ -108,9 +110,9 @@ export default function page() {
   };
 
   return (
-    <div className="relative max-h-screen flex flex-col bg-grey">
-      <Canvas canvasRef={canvasRef} canvas={canvas} className="" />
-      <Presentation className="-z-10 shadow-md absolute rounded-xl right-0 top-1/2 -translate-y-full border h-52 w-72 flex justify-center items-center" />
+    <div className="relative min-h-screen flex flex-col ">
+      <Canvas configRef={configRef} canvasRef={canvasRef} canvas={canvas} className="" />
+      {/* <Presentation className="-z-10 shadow-md absolute rounded-xl right-0 top-1/2 -translate-y-full border h-52 w-72 flex justify-center items-center" /> */}
       <Camera className="absolute bg-white rounded-full w-32 h-32 right-10 bottom-10" />
       <div className="absolute -translate-y-1/2 top-1/2 left-4">
         <Toolbox setWidth={(width) => canvas.setWidth(width)} setColor={(c) => canvas.setColor(c)} changeTool={changeTool} className="  " />
