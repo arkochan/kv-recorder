@@ -78,8 +78,7 @@ export default function page() {
   function keyUpAction({ category, action }: { category: string, action: string }) {
     switch (category) {
       case "modifier":
-
-
+        canvas.unSetModifier(action);
     }
   };
 
