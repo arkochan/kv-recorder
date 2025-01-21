@@ -22,6 +22,7 @@ export interface toolDrawArgumentWithPoints {
 export type toolDrawArgument = toolDrawArgumentStarEnd | toolDrawArgumentWithPoints;
 
 export abstract class strokeTool {
+  modifier: boolean = false;
   whiteboard: Whiteboard;
   ctx: CanvasRenderingContext2D;
   canvas: HTMLCanvasElement;
