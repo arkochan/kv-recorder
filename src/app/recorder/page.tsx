@@ -44,20 +44,20 @@ export default function page() {
   }, [modalOpen]);
   function changeTool(tool: string) {
     canvas.setTool(tool);
+
+
   }
   function executeAction(action: string) {
     canvas.executeAction(action);
   }
   useEffect(() => {
-    console.log("useEffect", "init"); // Logs whenever modalOpen changes
     if (!canvasRef.current) return;
     canvasRef.current.addEventListener('touchstart', (e) => e.preventDefault(), { passive: false });
     canvasRef.current.addEventListener('touchmove', (e) => e.preventDefault(), { passive: false });
     canvas.init({ canvas: canvasRef.current as HTMLCanvasElement, dpr: 2 });
   }, []);
 
-  function handleKeyMatch({ category, action }: { category: string, action: string }) {
-    console.log(category, action);
+  function keyDownAction({ category, action }: { category: string, action: string }) {
     switch (category) {
       case "tools":
         canvas.setTool(action);
@@ -68,13 +68,23 @@ export default function page() {
         break;
       case "media":
         break;
+      case "modifier":
+        canvas.setModifier(action);
+        break;
       default:
         console.warn(`Unhandled category: ${category}`);
     }
+  };
+  function keyUpAction({ category, action }: { category: string, action: string }) {
+    switch (category) {
+      case "modifier":
 
+
+    }
   };
 
-  useKeybindings(configRef, handleKeyMatch);
+
+  useKeybindings(configRef, keyDownAction, keyUpAction);
 
   function updateConfig(newConfig: Config) {
     // Update the config in localStorage and ref
