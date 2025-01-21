@@ -14,9 +14,6 @@ export class CanvasService {
   memCanvas: HTMLCanvasElement | null;
   memCtx: CanvasRenderingContext2D | null;
   whiteboard = new Whiteboard({ smoothFactor: 2, canvasService: this });
-
-
-
   constructor() {
     this.canvas = null;
     this.ctx = null;
@@ -57,6 +54,9 @@ export class CanvasService {
   }
   setModifier(action: string) {
     this.whiteboard.setModifier(action);
+  }
+  unSetModifier(action: string) {
+    this.whiteboard.unSetModifier(action);
   }
   setColor(color: string) {
     this.whiteboard.setColor(color)
