@@ -23,7 +23,8 @@ export class Whiteboard {
   pathTools: Record<string, pathTool> = {};
   canvasService: CanvasService;
   head: number = 0;
-
+  public straightLineModifier = false;
+  public straightLine = false;
   constructor({ smoothFactor, canvasService }: { smoothFactor: number, canvasService: CanvasService }) {
     this.smoothFactor = smoothFactor;
     this.Events = [];
@@ -44,6 +45,18 @@ export class Whiteboard {
     if (fn)
       fn(this.Events);
     return this.Events;
+  }
+  setModifier(string: string) {
+    // if modifier is straight line
+    // But skinpping that check for now
+    this.straightLineModifier = true;
+    console.log("this.straightLine", this.straightLineModifier);
+  }
+  unSetModifier(string: string) {
+    // if modifier is straight line
+    // But skinpping that check for now
+    this.straightLineModifier = false;
+    console.log("this.straightLine", this.straightLineModifier);
   }
   setColor(color: string) {
     this.color = color;

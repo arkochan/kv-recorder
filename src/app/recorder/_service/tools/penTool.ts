@@ -7,20 +7,27 @@ export class PenTool extends strokeTool {
     width: number = this.whiteboard.width): void {
     console.log("color width", color, width);
     if (!this.ctx) return;
+
+    this.ctx.beginPath()
+    this.ctx.strokeStyle = color;
+    this.ctx.lineWidth = width;
     if (points.length < 2) {
+      // draw dot
       var b = points[points.length - 1];
-      this.ctx.strokeStyle = color;
-      this.ctx.lineWidth = width;
-      this.ctx.beginPath()
       this.ctx.arc(b.x, b.y, this.ctx.lineWidth / 2, 0, Math.PI * 2, !0)
       this.ctx.closePath(), this.ctx.fill();
       return
     }
-    this.ctx.beginPath()
+
     this.ctx.moveTo(points[0].x, points[0].y);
 
-    this.ctx.strokeStyle = color;
-    this.ctx.lineWidth = width;
+    if (this.modifier) {
+      // Draw line instead to last point
+      this.ctx.lineTo(points[points.length - 1].x, points[points.length - 1].y);
+      this.ctx.stroke();
+      return;
+    }
+
     // draw a bunch of quadratics, using the average of two points as the control point
     for (let i = 1; i < points.length - 1; i++) {
       var c = (points[i].x + points[i + 1].x) / 2,
@@ -31,6 +38,9 @@ export class PenTool extends strokeTool {
   }
 
   down(p: Point) {
+    if (this.whiteboard.straightLineModifier) {
+      this.modifier = true;
+    }
   }
   calculateSpan(points: Point[]) {
     var max_horizontal = 0;
@@ -59,6 +69,7 @@ export class PenTool extends strokeTool {
     this.draw(this.whiteboard.points);
     this.clearMemCanvas();
     this.saveCanvas();
+    this.modifier = false;
   }
 
   isProximal(e: Event, p: Point, proximity: number): boolean {
