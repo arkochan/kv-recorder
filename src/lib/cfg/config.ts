@@ -1,4 +1,3 @@
-// src/config/keybindings.ts
 export const config = {
   keybindings: {
     tools: {
@@ -13,6 +12,9 @@ export const config = {
       redo: "Ctrl+Y",
       clear: "Ctrl+C",
     },
+    modifier: {
+      straightLine: "Shift",
+    }
     // media: {
     //   record: "Ctrl+R",
     //   pause: "Ctrl+P",
