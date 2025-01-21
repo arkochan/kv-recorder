@@ -55,10 +55,10 @@ export const useKeybindings = (
     };
 
     window.addEventListener("keydown", handleKeyDown);
-    // window.addEventListener("keyup", handleKeyUp);
+    window.addEventListener("keyup", handleKeyUp);
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
-      // window.removeEventListener("keyup", handleKeyUp);
+      window.removeEventListener("keyup", handleKeyUp);
     };
   }, []);
 };
