@@ -34,6 +34,7 @@ export default function page() {
     return config;
   }
   function loadConfig() {
+    if (typeof window === 'undefined') return;
     const storedConfig = localStorage.getItem("config");
     return storedConfig ? JSON.parse(storedConfig) : getDefaultConfig();
   }
