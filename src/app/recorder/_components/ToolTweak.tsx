@@ -49,7 +49,7 @@ export default function Tweaker({ className, setWidth, setColor }: { className?:
               max="10"
               value={lineWidth}
               onChange={handleWidthChange}
-              className="w-full"
+              className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
         </div>
